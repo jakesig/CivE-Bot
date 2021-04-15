@@ -6,7 +6,7 @@ keepAlive();
 
 // Login the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.SBrMZiYc1bUM2lH4OuW2XjbHEmo');
+client.login('/*token*/');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
