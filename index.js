@@ -41,6 +41,15 @@ client.on('message', msg => {
  	  msg.channel.send('various google-ing');
 });
 
+//Moderation
+
+client.on('message', msg => {
+  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")) {
+    msg.channel.bulkDelete(1);
+    msg.channel.send("Do not send that GIF in this server!");
+  }
+});
+
 //Commands
 
 client.on('message', msg => {
