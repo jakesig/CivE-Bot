@@ -6,7 +6,7 @@ keepAlive();
 
 // Login the bot
 
-client.login('/*token*/');
+client.login('token');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -47,8 +47,10 @@ client.on('message', msg => {
 
   //!ping: Pings the bot.
 
-  if (msg.content === '!ping' && !msg.author.bot)
+  if (msg.content === '!ping' && !msg.author.bot) {
  	  msg.reply('pong!');
+    return;
+  }
 
   //!help: Prints out helpful information.
 
