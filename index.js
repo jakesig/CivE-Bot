@@ -154,7 +154,7 @@ client.on('message', msg => {
       msg.reply("You didn't mention the user to kick!");
   }
 
-  //!bans: Bans specified user.
+  //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
     msg.channel.bulkDelete(1);
