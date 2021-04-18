@@ -6,11 +6,11 @@ keepAlive();
 
 // Login the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.PO7TMjyCkss0saYxEmvtfqQl8Yk');
+client.login('token');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity("Vito Cheeto");
+  client.user.setActivity("Yourself");
 });
 
 //Autoresponses
@@ -44,7 +44,7 @@ client.on('message', msg => {
 //Moderation
 
 client.on('message', msg => {
-  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")) {
+  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4") || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut") || msg.content.includes("https://gfycat.com/wetangryflamingo") || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
     msg.channel.bulkDelete(1);
     msg.channel.send("Do not send that GIF in this server!");
   }
@@ -148,7 +148,7 @@ client.on('message', msg => {
           });
       } 
       else 
-        msg.reply("That user isn't in this guild!");
+        msg.reply("That user isn't in this server!");
     } 
     else
       msg.reply("You didn't mention the user to kick!");
@@ -173,7 +173,7 @@ client.on('message', msg => {
         });
       } 
       else 
-        msg.reply("That user isn't in this guild!");
+        msg.reply("That user isn't in this server!");
     } 
     else 
       msg.reply("You didn't mention the user to ban!");
