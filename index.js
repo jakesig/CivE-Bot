@@ -16,6 +16,9 @@ client.on('ready', () => {
 //Autoresponses
 
 client.on('message', msg => {
+  if (msg.channel.name=="mod-chat" || msg.channel.name=="mod-review")
+    return;
+
   if (msg.content.includes('lennon') && !msg.author.bot)
  	  msg.channel.send('laksfh - i- ksjhfkap- errrrr');
   
