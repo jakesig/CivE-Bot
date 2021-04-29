@@ -6,7 +6,7 @@ keepAlive();
 
 // Login the bot
 
-client.login('token');
+client.login('');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -16,7 +16,7 @@ client.on('ready', () => {
 //Autoresponses
 
 client.on('message', msg => {
-  if (msg.channel.name=="mod-chat" || msg.channel.name=="mod-review")
+  if (msg.channel.name=="mod-chat" || msg.channel.name=="mod-review" || msg.channel.name=="announcements")
     return;
 
   if (msg.content.includes('lennon') && !msg.author.bot)
