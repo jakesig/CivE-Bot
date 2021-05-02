@@ -33,6 +33,7 @@ client.on('guildMemberAdd', member =>{
 	.setColor('#c28080')
 	.setTitle('Welcome ' + member.user.username + '!')
 	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
+  .setTimestamp();
   
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
