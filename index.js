@@ -34,7 +34,7 @@ client.on('guildMemberAdd', member =>{
 	.setTitle('Welcome ' + member.user.username + '!')
 	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
   .setTimestamp();
-  
+
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
 });
@@ -84,24 +84,38 @@ client.on('message', msg => {
 
   if (msg.content === '!help' && !msg.author.bot) {
     msg.channel.bulkDelete(1);
+    
+    msg.channel.startTyping();
+
+    const mod_embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('CivE Bot List of Commands')
+	  .setDescription(`!help: *Opens this menu.*
+      !ping: *Pings the bot.*
+      !kick {@member}: *Kicks member with name member.*
+      !ban {@member}: *Bans member with name member.*
+      !purge {number}: *Bulk deletes number of messages specified.*
+      !echo {channel-name} {message}: *Echoes message in channel specified.*
+      !join {channel-name}: *Joins voice call with channel name specified.*
+      !autoresponse {prompt} {response}: *Adds autoresponse to bot.*`)
+    .setTimestamp();
+
+    const embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('CivE Bot List of Commands')
+	  .setDescription(`!help: *Opens this menu.*
+      !ping: *Pings the bot.*`)
+    .setTimestamp();
+
+    msg.channel.stopTyping();
 
     if (msg.channel.name==='mod-chat' || msg.channel.name==='mod-log') {
-      msg.channel.send(`**CivE Bot List of Commands**\n
-      \n!help: *Opens this menu.*
-      \n!ping: *Pings the bot.*
-      \n!kick {@member}: *Kicks member with name member.*
-      \n!ban {@member}: *Bans member with name member.*
-      \n!purge {number}: *Bulk deletes number of messages specified.*
-      \n!echo {channel-name} {message}: *Echoes message in channel specified.*
-      \n!join {channel-name}: *Joins voice call with channel name specified.*
-      \n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
+      msg.channel.send(mod_embed);
       return;
     }
 
     else {
-      msg.channel.send(`**CivE Bot List of Commands**\n
-      \n!help: *Opens this menu.*
-      \n!ping: *Pings the bot.*`);
+      msg.channel.send(embed);
       return;
     }
 
@@ -122,7 +136,12 @@ client.on('message', msg => {
     fs.appendFile('auto.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });
-    msg.channel.send("**Autoreponse added!**\nPrompt: "+args[1]+"\nResponse: "+args[2]);
+    const embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('Autoresponse added!')
+	  .setDescription('**Prompt: **'+args[1]+"\n**Response: **"+args[2])
+    .setTimestamp();
+    msg.channel.send(embed);
  	  autoresponses.set(args[1],args[2]);
     return;
   }
@@ -161,15 +180,20 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
     msg.channel.bulkDelete(1);
-
     const user = msg.mentions.users.first();
+    const embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('Kicked '+user.username)
+	  .setDescription('I love kicking.')
+    .setTimestamp();
+
     if (user) {
       const member = msg.guild.member(user);
       if (member) {
         member
           .kick('null')
           .then(() => {
-            msg.channel.send(`i love kicking\nkicked ${user.username}`);
+            msg.channel.send(embed);
           })
           .catch(err => {
             msg.reply('I was unable to kick the member');
@@ -187,6 +211,11 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
     msg.channel.bulkDelete(1);
+    const embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('Banned '+user.username)
+	  .setDescription('Banning? Even better!')
+    .setTimestamp();
 
     const user = msg.mentions.users.first();
     if (user) {
@@ -194,7 +223,7 @@ client.on('message', msg => {
       if (member) {
         member.ban({reason: 'Because I said so.',})
         .then(() => {
-          msg.channel.send(`banning? even better!\nbanned ${user.username}`);
+          msg.channel.send(embed);
         })
         .catch(err => {
           msg.reply('I was unable to ban the member');
