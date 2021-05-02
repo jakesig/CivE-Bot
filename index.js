@@ -42,7 +42,10 @@ client.on('message', msg => {
 //Moderation
 
 client.on('message', msg => {
-  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4") || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut") || msg.content.includes("https://gfycat.com/wetangryflamingo") || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
+  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4") 
+  || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut") 
+  || msg.content.includes("https://gfycat.com/wetangryflamingo") 
+  || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
     msg.channel.bulkDelete(1);
     msg.channel.send("Do not send that GIF in this server!");
   }
