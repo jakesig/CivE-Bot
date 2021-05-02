@@ -1,6 +1,17 @@
 const keepAlive = require('./server');
 const Discord = require('discord.js');
+var fs = require('fs');
 const client = new Discord.Client();
+let autoresponses = new Map();
+
+fs.readFile('auto.txt', 'utf8', function(err, data) {
+    if (err) throw err;
+    var responses = data.split("\n");
+    for (i = 0; i < responses.length; i++) {
+      var args = responses[i].split("/");
+      autoresponses.set(args[0],args[1]);
+    }
+});
 
 keepAlive();
 
@@ -19,29 +30,13 @@ client.on('message', msg => {
   if (msg.channel.name=="mod-chat" || msg.channel.name=="mod-review" || msg.channel.name=="announcements")
     return;
 
-  if (msg.content.includes('lennon') && !msg.author.bot)
- 	  msg.channel.send('laksfh - i- ksjhfkap- errrrr');
-  
-  if (msg.content.includes('bastos') && !msg.author.bot)
- 	  msg.channel.send('carpe diem :smirk:');
-
-  if (msg.content.includes('stieber') && !msg.author.bot)
- 	  msg.channel.send('hoi polloi\nahaw ahaw ahaw');
-  
-  if (msg.content.includes(':smirk:') && !msg.author.bot)
- 	  msg.channel.send('carpe diem :smirk:');
-  
-  if (msg.content.includes('carpe diem') && !msg.author.bot)
-    msg.channel.send(`Hey! That's my line! :smirk:`);
-
-  if (msg.content.includes('akkey') && !msg.author.bot)
- 	  msg.channel.send('for crying out loud');
+  for (let key of autoresponses.keys())
+    if (msg.content.includes(key) && !msg.author.bot)
+      msg.channel.send(autoresponses.get(key));
   
   if (msg.content === 'pp' && !msg.author.bot)
  	  msg.channel.send('pp');
-  
-  if (msg.content.includes('shirley') && !msg.author.bot)
- 	  msg.channel.send('various google-ing');
+
 });
 
 //Moderation
@@ -69,8 +64,8 @@ client.on('message', msg => {
   if (msg.content === '!help' && !msg.author.bot) {
     msg.channel.bulkDelete(1);
 
-    if (msg.channel.name==='mod-chat') {
-      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*\n!kick {@member}: *Kicks member with name member.*\n!ban {@member}: *Bans member with name member.*\n!purge {number}: *Bulk deletes number of messages specified.*\n!announce {message}: *Posts message in #announcements channel.*\n!echo {message}: *Posts message in #jennaral channel.*\n!aecho {message}: *Posts message in #lennon-section-a channel.*\n!becho {message}: *Posts message in #lennon-section-b channel.*\n!join {channel-name}: *Joins voice call with channel name specified.*`);
+    if (msg.channel.name==='mod-chat' || msg.channel.name==='mod-log') {
+      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*\n!kick {@member}: *Kicks member with name member.*\n!ban {@member}: *Bans member with name member.*\n!purge {number}: *Bulk deletes number of messages specified.*\n!announce {message}: *Posts message in #announcements channel.*\n!echo {message}: *Posts message in #jennaral channel.*\n!aecho {message}: *Posts message in #lennon-section-a channel.*\n!becho {message}: *Posts message in #lennon-section-b channel.*\n!join {channel-name}: *Joins voice call with channel name specified.*\n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
       return;
     }
 
@@ -81,12 +76,28 @@ client.on('message', msg => {
 
   }
 
+  
   //Perms required past this point.
   
   if (msg.content.startsWith('!') && !msg.member.hasPermission('ADMINISTRATOR')) {
     msg.channel.send("Insufficient perms.");
     return;
   }
+
+  //!autoresponse: Adds autoresponse to bot.
+
+  if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
+    msg.channel.bulkDelete(1);
+    var args = msg.content.substring(1).split(" ");
+    let write = new String("\n"+args[1]+"/"+args[2]);
+    fs.appendFile('auto.txt', write, 'utf8', (err) => {
+      if (err) throw err;
+    });
+    msg.channel.send("Autoreponse added!\nPrompt: "+args[1]+"\nResponse: "+args[2]);
+ 	  autoresponses.set(args[1],args[2]);
+    return;
+  }
+
 
   //!becho: Echoes in #lennon-section-b channel.
 
@@ -183,7 +194,3 @@ client.on('message', msg => {
   }
 
 });
-
-//  client.on('guildMemberAdd', member => {
-//   member.guild.channels.cache.find(ch => ch.name === 'general').send(`Welcome to the CivE 2024 server, ` + member.username + `! Please wait for a moderator to review your profile.`);
-// });
