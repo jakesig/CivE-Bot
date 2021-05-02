@@ -17,7 +17,7 @@ keepAlive();
 
 // Login the bot
 
-client.login('');
+client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.Kn9pw0pBbmunwFA2J5oXpHt2Sik');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -65,7 +65,7 @@ client.on('message', msg => {
     msg.channel.bulkDelete(1);
 
     if (msg.channel.name==='mod-chat' || msg.channel.name==='mod-log') {
-      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*\n!kick {@member}: *Kicks member with name member.*\n!ban {@member}: *Bans member with name member.*\n!purge {number}: *Bulk deletes number of messages specified.*\n!announce {message}: *Posts message in #announcements channel.*\n!echo {message}: *Posts message in #jennaral channel.*\n!aecho {message}: *Posts message in #lennon-section-a channel.*\n!becho {message}: *Posts message in #lennon-section-b channel.*\n!join {channel-name}: *Joins voice call with channel name specified.*\n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
+      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*\n!kick {@member}: *Kicks member with name member.*\n!ban {@member}: *Bans member with name member.*\n!purge {number}: *Bulk deletes number of messages specified.*\n!echo {channel-name} {message}: *Echoes message in channel specified.*\n!join {channel-name}: *Joins voice call with channel name specified.*\n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
       return;
     }
 
@@ -97,26 +97,12 @@ client.on('message', msg => {
     return;
   }
 
+  //!echo: Echoes in provided channel.
 
-  //!becho: Echoes in #lennon-section-b channel.
-
-  if (msg.content.startsWith('!becho') && !msg.author.bot)
- 	  msg.guild.channels.cache.find( i => i.name === 'lennon-section-b').send(msg.content.substring(6));
-
-  //!aecho: Echoes in #lennon-section-a channel.
-
-  if (msg.content.startsWith('!aecho') && !msg.author.bot)
- 	  msg.guild.channels.cache.find( i => i.name === 'lennon-section-a').send(msg.content.substring(6));
-
-  //!aecho: Echoes in #announcements channel.
-
-  if (msg.content.startsWith('!announce') && !msg.author.bot)
- 	  msg.guild.channels.cache.find( i => i.name === 'announcements').send(msg.content.substring(9));
-
-  //!echo: Echoes in #jennaral channel.
-
-  if (msg.content.startsWith('!echo') && !msg.author.bot)
- 	  msg.guild.channels.cache.find( i => i.name === 'jennaral').send(msg.content.substring(5));
+  if (msg.content.startsWith('!echo') && !msg.author.bot) {
+    var args = msg.content.substring(1).split(" ")
+ 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(args[2]);
+  }
 
   //!purge: Bulk deletes specified number of messages.
 
