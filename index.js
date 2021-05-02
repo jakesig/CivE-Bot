@@ -75,11 +75,10 @@ client.on('message', msg => {
     }
 
   }
-
   
   //Perms required past this point.
   
-  if (msg.content.startsWith('!') && !msg.member.hasPermission('ADMINISTRATOR')) {
+  if (!msg.member.hasPermission('ADMINISTRATOR')) {
     msg.channel.send("Insufficient perms.");
     return;
   }
