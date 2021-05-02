@@ -17,7 +17,7 @@ keepAlive();
 
 // Login the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.Kn9pw0pBbmunwFA2J5oXpHt2Sik');
+client.login('');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -65,12 +65,22 @@ client.on('message', msg => {
     msg.channel.bulkDelete(1);
 
     if (msg.channel.name==='mod-chat' || msg.channel.name==='mod-log') {
-      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*\n!kick {@member}: *Kicks member with name member.*\n!ban {@member}: *Bans member with name member.*\n!purge {number}: *Bulk deletes number of messages specified.*\n!echo {channel-name} {message}: *Echoes message in channel specified.*\n!join {channel-name}: *Joins voice call with channel name specified.*\n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
+      msg.channel.send(`**CivE Bot List of Commands**\n
+      \n!help: *Opens this menu.*
+      \n!ping: *Pings the bot.*
+      \n!kick {@member}: *Kicks member with name member.*
+      \n!ban {@member}: *Bans member with name member.*
+      \n!purge {number}: *Bulk deletes number of messages specified.*
+      \n!echo {channel-name} {message}: *Echoes message in channel specified.*
+      \n!join {channel-name}: *Joins voice call with channel name specified.*
+      \n!autoresponse {prompt} {response}: *Adds autoresponse to bot.*`);
       return;
     }
 
     else {
-      msg.channel.send(`**CivE Bot List of Commands**\n\n!help: *Opens this menu.*\n!ping: *Pings the bot.*`);
+      msg.channel.send(`**CivE Bot List of Commands**\n
+      \n!help: *Opens this menu.*
+      \n!ping: *Pings the bot.*`);
       return;
     }
 
