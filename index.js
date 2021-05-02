@@ -4,6 +4,10 @@ var fs = require('fs');
 const client = new Discord.Client();
 let autoresponses = new Map();
 
+keepAlive();
+
+//Reads the autoresponses in the file auto.txt.
+
 fs.readFile('auto.txt', 'utf8', function(err, data) {
     if (err) throw err;
     var responses = data.split("\n");
@@ -13,21 +17,34 @@ fs.readFile('auto.txt', 'utf8', function(err, data) {
     }
 });
 
-keepAlive();
-
 // Login the bot
 
-client.login('');
+client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.Kn9pw0pBbmunwFA2J5oXpHt2Sik');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity("Yourself");
 });
 
+//Welcome message
+
+client.on('guildMemberAdd', member =>{
+  const embed = new Discord.MessageEmbed()
+	.setColor('#c28080')
+	.setTitle('Welcome ' + member.user.username + '!')
+	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
+  
+  member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
+
+});
+
+
 //Autoresponses
 
 client.on('message', msg => {
-  if (msg.channel.name=="mod-chat" || msg.channel.name=="mod-review" || msg.channel.name=="announcements")
+  if (msg.channel.name=="mod-chat" 
+  || msg.channel.name=="mod-review" 
+  || msg.channel.name=="announcements")
     return;
 
   for (let key of autoresponses.keys())
@@ -91,8 +108,7 @@ client.on('message', msg => {
   
   //Perms required past this point.
   
-  if (!msg.member.hasPermission('ADMINISTRATOR')) {
-    msg.channel.send("Insufficient perms.");
+  if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
     return;
   }
 
@@ -105,7 +121,7 @@ client.on('message', msg => {
     fs.appendFile('auto.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });
-    msg.channel.send("Autoreponse added!\nPrompt: "+args[1]+"\nResponse: "+args[2]);
+    msg.channel.send("**Autoreponse added!**\nPrompt: "+args[1]+"\nResponse: "+args[2]);
  	  autoresponses.set(args[1],args[2]);
     return;
   }
