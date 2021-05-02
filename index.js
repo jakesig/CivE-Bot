@@ -84,7 +84,7 @@ client.on('message', msg => {
 
   if (msg.content === '!help' && !msg.author.bot) {
     msg.channel.bulkDelete(1);
-    
+
     msg.channel.startTyping();
 
     const mod_embed = new Discord.MessageEmbed()
@@ -131,16 +131,20 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
     msg.channel.bulkDelete(1);
+
     var args = msg.content.substring(1).split(" ");
     let write = new String("\n"+args[1]+"/"+args[2]);
+
     fs.appendFile('auto.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });
+
     const embed = new Discord.MessageEmbed()
 	  .setColor('#c28080')
 	  .setTitle('Autoresponse added!')
 	  .setDescription('**Prompt: **'+args[1]+"\n**Response: **"+args[2])
     .setTimestamp();
+
     msg.channel.send(embed);
  	  autoresponses.set(args[1],args[2]);
     return;
@@ -149,8 +153,14 @@ client.on('message', msg => {
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
-    var args = msg.content.substring(1).split(" ")
- 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(args[2]);
+    var args = msg.content.substring(1).split(" ");
+    let write = new String(args[2]);
+    var i;
+    for (i = 3; i < args.length; i++) {
+        write+=" "+args[i];
+    }
+ 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(write);
+    return;
   }
 
   //!purge: Bulk deletes specified number of messages.
@@ -163,6 +173,7 @@ client.on('message', msg => {
     msg.channel.bulkDelete(messagecount).catch(err => {
       msg.channel.send(`You didn't type it correctly, try again.`);
     });
+    return;
   }
 
   //!join: Bot connects to voice channel specified.
@@ -174,6 +185,7 @@ client.on('message', msg => {
     channel.join().then(connection => {
       console.log("Successfully connected.");
     }).catch(e => {console.error(e);});
+    return;
   }
 
   //!kick: Kicks specified user.
@@ -181,6 +193,7 @@ client.on('message', msg => {
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
+
     const embed = new Discord.MessageEmbed()
 	  .setColor('#c28080')
 	  .setTitle('Kicked '+user.username)
@@ -205,19 +218,21 @@ client.on('message', msg => {
     } 
     else
       msg.reply("You didn't mention the user to kick!");
+    return;
   }
 
   //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
     msg.channel.bulkDelete(1);
+    const user = msg.mentions.users.first();
+
     const embed = new Discord.MessageEmbed()
 	  .setColor('#c28080')
 	  .setTitle('Banned '+user.username)
 	  .setDescription('Banning? Even better!')
     .setTimestamp();
 
-    const user = msg.mentions.users.first();
     if (user) {
       const member = msg.guild.member(user);
       if (member) {
@@ -235,6 +250,7 @@ client.on('message', msg => {
     } 
     else 
       msg.reply("You didn't mention the user to ban!");
+    return;
   }
 
 });
