@@ -45,7 +45,7 @@ client.on('message', msg => {
 
   //Handles DMs
 
-  if (msg.channel.type == "dm") {
+  if (msg.channel.type == "dm" && !msg.author.bot) {
     console.log(msg.author.username+": " + msg.content);
     msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {});
     return;
