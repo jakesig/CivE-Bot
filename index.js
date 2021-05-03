@@ -112,7 +112,7 @@ client.on('message', msg => {
       return;
     }
 
-  }  
+  }
 
   //!autoresponse: Adds autoresponse to bot.
 
