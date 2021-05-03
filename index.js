@@ -168,8 +168,10 @@ client.on('message', msg => {
       for (i = 3; i < args.length; i++) {
           write+=" "+args[i];
       }
+      msg.guild.channels.cache.find( i => i.name === args[1]).send(write);
+      return;
     }
- 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(write);
+ 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(args[2]);
     return;
   }
 
