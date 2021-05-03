@@ -39,10 +39,20 @@ client.on('guildMemberAdd', member =>{
 
 });
 
-
-//Autoresponses
+//Message handler
 
 client.on('message', msg => {
+
+  //Handles DMs
+
+  if (msg.channel.type == "dm") {
+    console.log(msg.author.username+": " + msg.content);
+    msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {});
+    return;
+  }
+
+  //Autoresponses
+
   if (msg.channel.name=="mod-chat" 
   || msg.channel.name=="mod-review" 
   || msg.channel.name=="announcements")
@@ -55,11 +65,8 @@ client.on('message', msg => {
   if (msg.content === 'pp' && !msg.author.bot)
  	  msg.channel.send('pp');
 
-});
+  //Moderation
 
-//Moderation
-
-client.on('message', msg => {
   if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4") 
   || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut") 
   || msg.content.includes("https://gfycat.com/wetangryflamingo") 
@@ -67,11 +74,8 @@ client.on('message', msg => {
     msg.channel.bulkDelete(1);
     msg.channel.send("Do not send that GIF in this server!");
   }
-});
 
-//Commands
-
-client.on('message', msg => {
+  //Commands
 
   //!ping: Pings the bot.
 
@@ -119,17 +123,16 @@ client.on('message', msg => {
       return;
     }
 
-  }
-  
-  //Perms required past this point.
-  
-  if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
-    return;
-  }
+  }  
 
   //!autoresponse: Adds autoresponse to bot.
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
     msg.channel.bulkDelete(1);
 
     var args = msg.content.substring(1).split(" ");
@@ -153,11 +156,18 @@ client.on('message', msg => {
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
     var args = msg.content.substring(1).split(" ");
     let write = new String(args[2]);
     var i;
-    for (i = 3; i < args.length; i++) {
-        write+=" "+args[i];
+    if (args.length>3) {
+      for (i = 3; i < args.length; i++) {
+          write+=" "+args[i];
+      }
     }
  	  msg.guild.channels.cache.find( i => i.name === args[1]).send(write);
     return;
@@ -166,6 +176,11 @@ client.on('message', msg => {
   //!purge: Bulk deletes specified number of messages.
 
   if (msg.content.startsWith('!purge')) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
     var args = msg.content.substring(1).split(" ");
 
     let messagecount = parseInt(args[1])+1;
@@ -179,6 +194,11 @@ client.on('message', msg => {
   //!join: Bot connects to voice channel specified.
 
   if (msg.content.startsWith('!join') && !msg.author.bot) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
  	  const channel = client.channels.cache.find(i => i.name === msg.content.substring(6));
     if (!channel)
       return console.error("The channel does not exist!");
@@ -191,6 +211,11 @@ client.on('message', msg => {
   //!kick: Kicks specified user.
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
 
@@ -224,6 +249,11 @@ client.on('message', msg => {
   //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
 
