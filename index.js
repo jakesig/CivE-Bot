@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 var fs = require('fs');
 const client = new Discord.Client();
 let autoresponses = new Map();
+let userID = "371052099850469377";
 
 keepAlive();
 
@@ -49,21 +50,7 @@ client.on('message', msg => {
     console.log(msg.author.username+": " + msg.content);
     msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {});
     return;
-  }
-
-  //Autoresponses
-
-  if (msg.channel.name=="mod-chat" 
-  || msg.channel.name=="mod-review" 
-  || msg.channel.name=="announcements")
-    return;
-
-  for (let key of autoresponses.keys())
-    if (msg.content.includes(key) && !msg.author.bot)
-      msg.channel.send(autoresponses.get(key));
-  
-  if (msg.content === 'pp' && !msg.author.bot)
- 	  msg.channel.send('pp');
+  }  
 
   //Moderation
 
@@ -73,6 +60,7 @@ client.on('message', msg => {
   || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
     msg.channel.bulkDelete(1);
     msg.channel.send("Do not send that GIF in this server!");
+    return;
   }
 
   //Commands
@@ -80,6 +68,7 @@ client.on('message', msg => {
   //!ping: Pings the bot.
 
   if (msg.content === '!ping' && !msg.author.bot) {
+    client.users.cache.get(userID).send("Bot was pinged!");
  	  msg.reply('pong!');
     return;
   }
@@ -136,19 +125,34 @@ client.on('message', msg => {
     msg.channel.bulkDelete(1);
 
     var args = msg.content.substring(1).split(" ");
-    let write = new String("\n"+args[1]+"/"+args[2]);
-
-    fs.appendFile('auto.txt', write, 'utf8', (err) => {
-      if (err) throw err;
-    });
-
     const embed = new Discord.MessageEmbed()
 	  .setColor('#c28080')
 	  .setTitle('Autoresponse added!')
 	  .setDescription('**Prompt: **'+args[1]+"\n**Response: **"+args[2])
     .setTimestamp();
+    let write = new String("\n"+args[1]+"/"+args[2]);
+
+    if (args.length>3) {
+      for (i = 3; i < args.length; i++) {
+          write+=" "+args[i];
+      }
+      var key = write.split("/");
+      embed.setDescription('**Prompt: **'+args[1]+"\n**Response: **"+key[1]);
+      msg.channel.send(embed);
+      client.users.cache.get(userID).send(embed);
+      fs.appendFile('auto.txt', write, 'utf8', (err) => {
+      if (err) throw err;
+      });
+      autoresponses.set(args[1],key[1]);
+      return;
+    }
+
+    fs.appendFile('auto.txt', write, 'utf8', (err) => {
+      if (err) throw err;
+    });    
 
     msg.channel.send(embed);
+    client.users.cache.get(userID).send(embed);
  	  autoresponses.set(args[1],args[2]);
     return;
   }
@@ -156,6 +160,8 @@ client.on('message', msg => {
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
+
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
 
     if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
       return;
@@ -182,6 +188,8 @@ client.on('message', msg => {
     if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
       return;
     }
+
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
 
     var args = msg.content.substring(1).split(" ");
 
@@ -217,6 +225,8 @@ client.on('message', msg => {
     if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
       return;
     }
+
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
@@ -256,6 +266,8 @@ client.on('message', msg => {
       return;
     }
 
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
+
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
 
@@ -284,5 +296,19 @@ client.on('message', msg => {
       msg.reply("You didn't mention the user to ban!");
     return;
   }
+
+  //Autoresponses
+
+  if (msg.channel.name=="mod-chat" 
+  || msg.channel.name=="mod-review" 
+  || msg.channel.name=="announcements")
+    return;
+
+  for (let key of autoresponses.keys())
+    if (msg.content.includes(key) && !msg.author.bot)
+      msg.channel.send(autoresponses.get(key));
+  
+  if (msg.content === 'pp' && !msg.author.bot)
+ 	  msg.channel.send('pp');
 
 });
