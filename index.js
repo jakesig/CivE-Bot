@@ -100,7 +100,8 @@ client.on('message', msg => {
   //!ping: Pings the bot.
 
   if (msg.content === '!ping' && !msg.author.bot) {
-    client.users.cache.get(userID).send("Bot was pinged!");
+  
+    client.users.cache.get(userID).send("Bot was pinged!\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
  	  msg.reply('pong!');
     return;
   }
@@ -108,6 +109,7 @@ client.on('message', msg => {
   //!help: Prints out helpful information.
 
   if (msg.content === '!help' && !msg.author.bot) {
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
     msg.channel.bulkDelete(1);
 
     msg.channel.startTyping();
@@ -193,11 +195,11 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
-
     if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
       return;
     }
+
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
     var args = msg.content.substring(1).split(" ");
     let write = new String(args[2]);
@@ -221,7 +223,7 @@ client.on('message', msg => {
       return;
     }
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
     var args = msg.content.substring(1).split(" ");
 
@@ -241,6 +243,8 @@ client.on('message', msg => {
       return;
     }
 
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+
  	  const channel = client.channels.cache.find(i => i.name === msg.content.substring(6));
     if (!channel)
       return console.error("The channel does not exist!");
@@ -258,7 +262,7 @@ client.on('message', msg => {
       return;
     }
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
@@ -298,7 +302,7 @@ client.on('message', msg => {
       return;
     }
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content);
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
