@@ -11,3 +11,5 @@
 !purge {number}: Bulk deletes number of messages specified.
 
 !echo {channel-name} {message}: Posts message in channel specified.
+
+!verify {member}: Assigns Civil Engineering role to member.

@@ -5,6 +5,7 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let userID = "371052099850469377";
 
+
 keepAlive();
 
 //Reads the autoresponses in the file auto.txt.
@@ -30,12 +31,12 @@ client.on('ready', () => {
 //On member add
 
 client.on('guildMemberAdd', member =>{
-  //Autoroles
+  //Autoroles  
 
   var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+  var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
   var spec = member.guild.roles.cache.find(role => role.name === "Spectator");
   var ben = member.guild.roles.cache.find(role => role.name === "not ben");
-  var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
 
   //Ben
 
@@ -124,7 +125,8 @@ client.on('message', msg => {
       !purge {number}: *Bulk deletes number of messages specified.*
       !echo {channel-name} {message}: *Echoes message in channel specified.*
       !join {channel-name}: *Joins voice call with channel name specified.*
-      !autoresponse {prompt} {response}: *Adds autoresponse to bot.*`)
+      !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
+      !verify {@member}: *Assigns Civil Engineering role to member.*`)
     .setTimestamp();
 
     const embed = new Discord.MessageEmbed()
@@ -252,6 +254,42 @@ client.on('message', msg => {
       console.log("Successfully connected.");
     }).catch(e => {console.error(e);});
     return;
+  }
+
+  //!verify: Verifies user, giving them the Civil Engineer Role.
+
+  if (msg.content.startsWith('!verify') && !msg.author.bot) {
+
+    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+      return;
+    }
+
+    const embed = new Discord.MessageEmbed()
+	  .setColor('#c28080')
+	  .setTitle('Verified '+user.username+"!")
+	  .setDescription('Civil Engineer role assigned.')
+    .setTimestamp();
+
+    var pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+    var civ = msg.member.guild.roles.cache.find(role => role.name === "Civil Engineer");
+
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+
+    msg.channel.bulkDelete(1);
+    const user = msg.mentions.users.first();
+    if (user) {
+      const memb = msg.guild.member(user);
+      if (memb) {
+        memb.roles.remove(pend);
+        memb.roles.add(civ);
+        msg.channel.send(embed);
+      }
+      else
+        msg.reply("Can't find user.");
+    }
+    else
+      msg.reply("No user mentioned.");
+    
   }
 
   //!kick: Kicks specified user.
