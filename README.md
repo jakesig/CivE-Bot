@@ -1,4 +1,4 @@
-!help: Opens this menu.
+!help: Opens the help menu.
 
 !ping: Pings the bot.
 
