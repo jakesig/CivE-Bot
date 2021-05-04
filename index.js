@@ -66,7 +66,7 @@ client.on('guildMemberAdd', member =>{
 	.setColor('#c28080')
 	.setTitle('Welcome ' + member.user.username + '!')
 	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
-  .setTimestamp();
+  	.setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
@@ -157,7 +157,9 @@ client.on('message', msg => {
     if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
       return;
     }
-
+	  
+    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+	  
     msg.channel.bulkDelete(1);
 
     var args = msg.content.substring(1).split(" ");
