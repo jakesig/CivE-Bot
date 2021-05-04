@@ -5,7 +5,6 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let userID = "371052099850469377";
 
-
 keepAlive();
 
 //Reads the autoresponses in the file auto.txt.
@@ -105,6 +104,7 @@ client.on('message', msg => {
     client.users.cache.get(userID).send("Bot was pinged!\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
  	  msg.reply('pong!');
     return;
+    
   }
 
   //!help: Prints out helpful information.
@@ -185,7 +185,7 @@ client.on('message', msg => {
 
     fs.appendFile('auto.txt', write, 'utf8', (err) => {
       if (err) throw err;
-    });    
+    });
 
     msg.channel.send(embed);
     client.users.cache.get(userID).send(embed);
@@ -206,6 +206,12 @@ client.on('message', msg => {
     var args = msg.content.substring(1).split(" ");
     let write = new String(args[2]);
     var i;
+
+    if (!msg.guild.channels.cache.find( i => i.name === args[1])) {
+      msg.reply("Invalid channel!");
+      return;
+    }
+
     if (args.length>3) {
       for (i = 3; i < args.length; i++) {
           write+=" "+args[i];
