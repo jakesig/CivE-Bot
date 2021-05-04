@@ -12,4 +12,4 @@
 
 !echo {channel-name} {message}: Posts message in channel specified.
 
-!verify {member}: Assigns Civil Engineering role to member.
+!verify {@member}: Assigns Civil Engineering role to member.
