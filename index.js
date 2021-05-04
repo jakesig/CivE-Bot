@@ -159,9 +159,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 	  
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 	  
@@ -204,9 +203,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
@@ -234,9 +232,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!purge')) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
@@ -254,9 +251,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!join') && !msg.author.bot) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
@@ -273,9 +269,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!verify') && !msg.author.bot) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     const embed = new Discord.MessageEmbed()
 	  .setColor('#c28080')
@@ -309,9 +304,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
@@ -349,9 +343,8 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
 
-    if (!perms) {
+    if (!perms)
       return;
-    }
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
 
