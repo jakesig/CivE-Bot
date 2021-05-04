@@ -27,15 +27,9 @@ client.on('ready', () => {
   client.user.setActivity("Yourself");
 });
 
-//Welcome message
+//On member add
 
 client.on('guildMemberAdd', member =>{
-  const embed = new Discord.MessageEmbed()
-	.setColor('#c28080')
-	.setTitle('Welcome ' + member.user.username + '!')
-	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
-  .setTimestamp();
-
   //Autoroles
 
   var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
@@ -65,6 +59,14 @@ client.on('guildMemberAdd', member =>{
 
   else
     member.roles.add(pend);
+
+  //Welcome message
+
+  const embed = new Discord.MessageEmbed()
+	.setColor('#c28080')
+	.setTitle('Welcome ' + member.user.username + '!')
+	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
+  .setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
