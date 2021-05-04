@@ -36,6 +36,36 @@ client.on('guildMemberAdd', member =>{
 	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
   .setTimestamp();
 
+  //Autoroles
+
+  var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+  var spec = member.guild.roles.cache.find(role => role.name === "Spectator");
+  var ben = member.guild.roles.cache.find(role => role.name === "not ben");
+  var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
+
+  //Ben
+
+  if (member.id == "443921754038075393") {
+    member.setNickname("not ben");
+    member.roles.add(spec);
+    member.roles.add(ben);
+  }
+
+  //Ruman and Sohaib
+
+  else if (member.id == "748401441848164382" || member.id == "166851422854447104")
+    member.roles.add(spec);
+
+  //Josh
+
+  else if (member.id == "160122478478229505")
+    member.roles.add(civ);
+  
+  //Everyone else
+
+  else
+    member.roles.add(pend);
+
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
 });
