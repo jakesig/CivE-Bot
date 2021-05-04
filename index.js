@@ -150,11 +150,16 @@ client.on('message', msg => {
 
   }
 
+  //Boolean that determines if a member has Admin permissions.
+
+  if (msg.member)
+    var perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
+
   //!autoresponse: Adds autoresponse to bot.
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 	  
@@ -199,7 +204,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
@@ -229,7 +234,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!purge')) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
@@ -249,7 +254,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!join') && !msg.author.bot) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
@@ -268,7 +273,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!verify') && !msg.author.bot) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
@@ -304,7 +309,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
@@ -344,7 +349,7 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!ban') && !msg.author.bot ) {
 
-    if (!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot) {
+    if (!perms) {
       return;
     }
 
