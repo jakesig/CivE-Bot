@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 var fs = require('fs');
 const client = new Discord.Client();
 let autoresponses = new Map();
+let roles = new Map();
 let userID = "371052099850469377";
 
 keepAlive();
@@ -18,9 +19,20 @@ fs.readFile('auto.txt', 'utf8', function(err, data) {
     }
 });
 
+//Read users for Rolepersist
+
+fs.readFile('roles.txt', 'utf8', function(err, data) {
+    if (err) throw err;
+    var responses = data.split("\n");
+    for (i = 0; i < responses.length; i++) {
+      var args = responses[i].split("/");
+      roles.set(args[0],args[1]);
+    }
+});
+
 // Login the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.Kn9pw0pBbmunwFA2J5oXpHt2Sik');
+client.login('token');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -31,6 +43,7 @@ client.on('ready', () => {
 //On member add
 
 client.on('guildMemberAdd', member =>{
+
   //Autoroles  
 
   var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
@@ -40,7 +53,7 @@ client.on('guildMemberAdd', member =>{
 
   //Ben
 
-  if (member.id == "443921754038075393") {
+  if (roles.get(member.id) == "Ben") {
     member.setNickname("not ben");
     member.roles.add(spec);
     member.roles.add(ben);
@@ -48,13 +61,15 @@ client.on('guildMemberAdd', member =>{
 
   //Ruman and Sohaib
 
-  else if (member.id == "748401441848164382" || member.id == "166851422854447104")
+  else if (roles.get(member.id) == "Ruman" || roles.get(member.id) == "Sohaib") {
     member.roles.add(spec);
+  }
 
   //Josh
 
-  else if (member.id == "160122478478229505")
+  else if (roles.get(member.id) == "Josh") {
     member.roles.add(civ);
+  }
   
   //Everyone else
 
