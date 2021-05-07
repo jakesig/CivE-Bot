@@ -390,8 +390,5 @@ client.on('message', msg => {
   for (let key of autoresponses.keys())
     if (msg.content.includes(key) && !msg.author.bot)
       msg.channel.send(autoresponses.get(key));
-  
-  if (msg.content === 'pp' && !msg.author.bot)
- 	  msg.channel.send('pp');
 
 });
