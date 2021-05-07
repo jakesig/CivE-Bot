@@ -25,6 +25,7 @@ client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.Kn9pw0pBbmunwFA2J5oXpHt2Sik');
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity("Yourself");
+  client.users.cache.get(userID).send("The bot is alive!");
 });
 
 //On member add
@@ -207,6 +208,8 @@ client.on('message', msg => {
       return;
 
     client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+
+    msg.channel.bulkDelete(1);
 
     var args = msg.content.substring(1).split(" ");
     let write = new String(args[2]);
