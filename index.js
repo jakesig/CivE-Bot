@@ -6,6 +6,7 @@ let autoresponses = new Map();
 let roles = new Map();
 let userID = "371052099850469377";
 var status;
+var token='';
 
 keepAlive();
 
@@ -31,14 +32,20 @@ fs.readFile('roles.txt', 'utf8', function(err, data) {
   }
 });
 
+//Reads status from file
+
 fs.readFile('status.txt', 'utf8', function(err, data) {
   if (err) throw err;
   status = data;
 });
 
-// Login the bot
+//Reads token from file and logs in the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.soWxheln9uRSlP9v3ErAHPsXHq8');
+fs.readFile('token.txt', 'utf8', function(err, data) {
+  if (err) throw err;
+  token += data;
+  client.login(token);
+});
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
