@@ -5,6 +5,7 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = "371052099850469377";
+var status;
 
 keepAlive();
 
@@ -30,13 +31,18 @@ fs.readFile('roles.txt', 'utf8', function(err, data) {
   }
 });
 
+fs.readFile('status.txt', 'utf8', function(err, data) {
+  if (err) throw err;
+  status = data;
+});
+
 // Login the bot
 
-client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.wnWx4ZW4A6Y6kKnTCmSkaTmErnw');
+client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.soWxheln9uRSlP9v3ErAHPsXHq8');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity("Yourself");
+  client.user.setActivity(status);
   client.users.cache.get(userID).send("The bot is alive!");
 });
 
@@ -44,12 +50,13 @@ client.on('ready', () => {
 
 client.on('guildMemberAdd', member => {
 
-  //Autoroles  
+  //Roles  
 
   var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
   var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
   var spec = member.guild.roles.cache.find(role => role.name === "Spectator");
   var ben = member.guild.roles.cache.find(role => role.name === "not ben");
+  var mod = member.guild.roles.cache.find(role => role.name === "Moderator");
 
   //Ben
 
@@ -73,8 +80,10 @@ client.on('guildMemberAdd', member => {
 
   //Everyone else
 
-  else
+  else {
     member.roles.add(pend);
+    member.guild.channels.cache.find(i => i.name === "mod-chat").send("<@"+member.user.id+"> has joined. "+"<@&"+mod.id+"> please assign a role.");
+  }
 
   //Welcome message
 
@@ -85,6 +94,7 @@ client.on('guildMemberAdd', member => {
     .setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
+  
 
 });
 
@@ -159,7 +169,8 @@ client.on('message', msg => {
       !echo {channel-name} {message}: *Echoes message in channel specified.*
       !join {channel-name}: *Joins voice call with channel name specified.*
       !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
-      !verify {@member}: *Assigns Civil Engineering role to member.*`)
+      !verify {@member}: *Assigns Civil Engineering role to member.*
+      !setstatus {status}: Sets the status of the bot.`)
       .setTimestamp();
 
     const embed = new Discord.MessageEmbed()
@@ -187,6 +198,38 @@ client.on('message', msg => {
 
   if (msg.member)
     var perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
+
+  //!setstatus: Sets the status of the bot.
+
+  if (msg.content.startsWith('!setstatus') && !msg.author.bot) {
+    if (!perms)
+      return;
+
+    var userstatus = msg.content.substring(11);
+    msg.channel.bulkDelete(1);
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Status set')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**New status: **Playing **"+userstatus+"**"+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    const embed = new Discord.MessageEmbed()
+      .setColor('#c28080')
+      .setTitle('Status set!')
+      .setDescription("**New status: **Playing **"+userstatus+"**")
+      .setTimestamp();
+
+    msg.channel.send(embed);
+
+    fs.writeFileSync('status.txt', userstatus, 'utf8', (err) => {
+        if (err) throw err;
+    });
+
+    client.user.setActivity(userstatus);
+  }
 
   //!autoresponse: Adds autoresponse to bot.
 
@@ -581,6 +624,7 @@ client.on('voiceStateUpdate', (oldstate, newstate) => {
   if (oldstate.channelID==null) {
     embed.setTitle(newstate.member.displayName + " connected");
     embed.setDescription("**Channel: **🔈"+newstate.channel.name);
+    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
   }
 
   //Voice Disconnect
@@ -588,16 +632,18 @@ client.on('voiceStateUpdate', (oldstate, newstate) => {
   else if (newstate.channelID==null) {
     embed.setTitle(newstate.member.displayName + " disconnected");
     embed.setDescription("**Channel: **🔈"+oldstate.channel.name);
+    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
   }
 
   //Move Channels
 
-  else {
+  else if (newstate.channelID!=oldstate.channelID) {
     embed.setTitle(newstate.member.displayName + " moved");
     embed.setDescription("**From: **🔈"+oldstate.channel.name+"\n**To: **🔈"+newstate.channel.name);
+    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
   }
 
-  oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  
 });
 
 //Member Banned

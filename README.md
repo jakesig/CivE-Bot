@@ -2,6 +2,8 @@
 
 !ping: Pings the bot.
 
+!setstatus {status}: Sets the status of the bot.
+
 !autoresponse {prompt} {response}: Adds autoresponse to bot with prompt and response respectively.
 
 !kick {@member}: Kicks member with name member.
