@@ -11,28 +11,28 @@ keepAlive();
 //Reads the autoresponses in the file auto.txt.
 
 fs.readFile('auto.txt', 'utf8', function(err, data) {
-    if (err) throw err;
-    var responses = data.split("\n");
-    for (i = 0; i < responses.length; i++) {
-      var args = responses[i].split("/");
-      autoresponses.set(args[0],args[1]);
-    }
+  if (err) throw err;
+  var responses = data.split("\n");
+  for (i = 0; i < responses.length; i++) {
+    var args = responses[i].split("/");
+    autoresponses.set(args[0], args[1]);
+  }
 });
 
 //Read users for Rolepersist
 
 fs.readFile('roles.txt', 'utf8', function(err, data) {
-    if (err) throw err;
-    var responses = data.split("\n");
-    for (i = 0; i < responses.length; i++) {
-      var args = responses[i].split("/");
-      roles.set(args[0],args[1]);
-    }
+  if (err) throw err;
+  var responses = data.split("\n");
+  for (i = 0; i < responses.length; i++) {
+    var args = responses[i].split("/");
+    roles.set(args[0], args[1]);
+  }
 });
 
 // Login the bot
 
-client.login('token');
+client.login('ODMxMDQ3ODUxMDMwMDg1NjQz.YHPjnw.wnWx4ZW4A6Y6kKnTCmSkaTmErnw');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -42,7 +42,7 @@ client.on('ready', () => {
 
 //On member add
 
-client.on('guildMemberAdd', member =>{
+client.on('guildMemberAdd', member => {
 
   //Autoroles  
 
@@ -70,7 +70,7 @@ client.on('guildMemberAdd', member =>{
   else if (roles.get(member.id) == "Josh") {
     member.roles.add(civ);
   }
-  
+
   //Everyone else
 
   else
@@ -79,10 +79,10 @@ client.on('guildMemberAdd', member =>{
   //Welcome message
 
   const embed = new Discord.MessageEmbed()
-	.setColor('#c28080')
-	.setTitle('Welcome ' + member.user.username + '!')
-	.setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
-  	.setTimestamp();
+    .setColor('#c28080')
+    .setTitle('Welcome ' + member.user.username + '!')
+    .setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
+    .setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 
@@ -95,17 +95,17 @@ client.on('message', msg => {
   //Handles DMs
 
   if (msg.channel.type == "dm" && !msg.author.bot) {
-    console.log(msg.author.username+": " + msg.content);
-    msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {});
+    console.log(msg.author.username + ": " + msg.content);
+    msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => { });
     return;
-  }  
+  }
 
   //Moderation
 
-  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4") 
-  || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut") 
-  || msg.content.includes("https://gfycat.com/wetangryflamingo") 
-  || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
+  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")
+    || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut")
+    || msg.content.includes("https://gfycat.com/wetangryflamingo")
+    || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
     msg.channel.bulkDelete(1);
     msg.channel.send("Do not send that GIF in this server!");
     return;
@@ -116,25 +116,42 @@ client.on('message', msg => {
   //!ping: Pings the bot.
 
   if (msg.content === '!ping' && !msg.author.bot) {
-  
-    client.users.cache.get(userID).send("Bot was pinged!\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
- 	  msg.reply('pong!');
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Bot pinged')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("Bot was pinged!\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+    msg.reply('pong!');
     return;
-    
+
   }
 
   //!help: Prints out helpful information.
 
   if (msg.content === '!help' && !msg.author.bot) {
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Help requested')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
     msg.channel.bulkDelete(1);
 
     msg.channel.startTyping();
 
     const mod_embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('CivE Bot List of Commands')
-	  .setDescription(`!help: *Opens this menu.*
+      .setColor('#c28080')
+      .setTitle('CivE Bot List of Commands')
+      .setDescription(`!help: *Opens this menu.*
       !ping: *Pings the bot.*
       !kick {@member}: *Kicks member with name member.*
       !ban {@member}: *Bans member with name member.*
@@ -143,18 +160,18 @@ client.on('message', msg => {
       !join {channel-name}: *Joins voice call with channel name specified.*
       !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
       !verify {@member}: *Assigns Civil Engineering role to member.*`)
-    .setTimestamp();
+      .setTimestamp();
 
     const embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('CivE Bot List of Commands')
-	  .setDescription(`!help: *Opens this menu.*
+      .setColor('#c28080')
+      .setTitle('CivE Bot List of Commands')
+      .setDescription(`!help: *Opens this menu.*
       !ping: *Pings the bot.*`)
-    .setTimestamp();
+      .setTimestamp();
 
     msg.channel.stopTyping();
 
-    if (msg.channel.name==='mod-chat' || msg.channel.name==='mod-log') {
+    if (msg.channel.name === 'mod-chat' || msg.channel.name === 'mod-log') {
       msg.channel.send(mod_embed);
       return;
     }
@@ -177,31 +194,39 @@ client.on('message', msg => {
 
     if (!perms)
       return;
-	  
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
-	  
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Autoresponse added')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
     msg.channel.bulkDelete(1);
 
     var args = msg.content.substring(1).split(" ");
     const embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('Autoresponse added!')
-	  .setDescription('**Prompt: **'+args[1]+"\n**Response: **"+args[2])
-    .setTimestamp();
-    let write = new String("\n"+args[1]+"/"+args[2]);
+      .setColor('#c28080')
+      .setTitle('Autoresponse added!')
+      .setDescription('**Prompt: **' + args[1] + "\n**Response: **" + args[2])
+      .setTimestamp();
+    let write = new String("\n" + args[1] + "/" + args[2]);
 
-    if (args.length>3) {
+    if (args.length > 3) {
       for (i = 3; i < args.length; i++) {
-          write+=" "+args[i];
+        write += " " + args[i];
       }
       var key = write.split("/");
-      embed.setDescription('**Prompt: **'+args[1]+"\n**Response: **"+key[1]);
+      embed.setDescription('**Prompt: **' + args[1] + "\n**Response: **" + key[1]);
       msg.channel.send(embed);
       client.users.cache.get(userID).send(embed);
       fs.appendFile('auto.txt', write, 'utf8', (err) => {
-      if (err) throw err;
+        if (err) throw err;
       });
-      autoresponses.set(args[1],key[1]);
+      autoresponses.set(args[1], key[1]);
       return;
     }
 
@@ -211,7 +236,7 @@ client.on('message', msg => {
 
     msg.channel.send(embed);
     client.users.cache.get(userID).send(embed);
- 	  autoresponses.set(args[1],args[2]);
+    autoresponses.set(args[1], args[2]);
     return;
   }
 
@@ -222,7 +247,15 @@ client.on('message', msg => {
     if (!perms)
       return;
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Echo used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
     msg.channel.bulkDelete(1);
 
@@ -230,19 +263,19 @@ client.on('message', msg => {
     let write = new String(args[2]);
     var i;
 
-    if (!msg.guild.channels.cache.find( i => i.name === args[1])) {
+    if (!msg.guild.channels.cache.find(i => i.name === args[1])) {
       msg.reply("Invalid channel!");
       return;
     }
 
-    if (args.length>3) {
+    if (args.length > 3) {
       for (i = 3; i < args.length; i++) {
-          write+=" "+args[i];
+        write += " " + args[i];
       }
-      msg.guild.channels.cache.find( i => i.name === args[1]).send(write);
+      msg.guild.channels.cache.find(i => i.name === args[1]).send(write);
       return;
     }
- 	  msg.guild.channels.cache.find( i => i.name === args[1]).send(args[2]);
+    msg.guild.channels.cache.find(i => i.name === args[1]).send(args[2]);
     return;
   }
 
@@ -253,11 +286,19 @@ client.on('message', msg => {
     if (!perms)
       return;
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Moderator command used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
     var args = msg.content.substring(1).split(" ");
 
-    let messagecount = parseInt(args[1])+1;
+    let messagecount = parseInt(args[1]) + 1;
 
     msg.channel.bulkDelete(messagecount).catch(err => {
       msg.channel.send(`You didn't type it correctly, try again.`);
@@ -272,14 +313,22 @@ client.on('message', msg => {
     if (!perms)
       return;
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Moderator command used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
 
- 	  const channel = client.channels.cache.find(i => i.name === msg.content.substring(6));
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+    const channel = client.channels.cache.find(i => i.name === msg.content.substring(6));
     if (!channel)
       return console.error("The channel does not exist!");
     channel.join().then(connection => {
       console.log("Successfully connected.");
-    }).catch(e => {console.error(e);});
+    }).catch(e => { console.error(e); });
     return;
   }
 
@@ -290,16 +339,24 @@ client.on('message', msg => {
     if (!perms)
       return;
 
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Moderator command used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
     const embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('Verified '+user.username+"!")
-	  .setDescription('Civil Engineer role assigned.')
-    .setTimestamp();
+      .setColor('#c28080')
+      .setTitle('Verified ' + user.username + "!")
+      .setDescription('Civil Engineer role assigned.')
+      .setTimestamp();
 
     var pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
     var civ = msg.member.guild.roles.cache.find(role => role.name === "Civil Engineer");
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
@@ -315,7 +372,7 @@ client.on('message', msg => {
     }
     else
       msg.reply("No user mentioned.");
-    
+
   }
 
   //!kick: Kicks specified user.
@@ -325,16 +382,26 @@ client.on('message', msg => {
     if (!perms)
       return;
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Moderator command used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
 
     const embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('Kicked '+user.username)
-	  .setDescription('I love kicking.')
-    .setTimestamp();
+      .setColor('#c28080')
+      .setTitle('Kicked ' + user.username)
+      .setDescription('I love kicking.')
+      .setTimestamp();
 
     if (user) {
       const member = msg.guild.member(user);
@@ -348,10 +415,10 @@ client.on('message', msg => {
             msg.reply('I was unable to kick the member');
             console.error(err);
           });
-      } 
-      else 
+      }
+      else
         msg.reply("That user isn't in this server!");
-    } 
+    }
     else
       msg.reply("You didn't mention the user to kick!");
     return;
@@ -359,51 +426,299 @@ client.on('message', msg => {
 
   //!ban: Bans specified user.
 
-  if (msg.content.startsWith('!ban') && !msg.author.bot ) {
+  if (msg.content.startsWith('!ban') && !msg.author.bot) {
 
     if (!perms)
       return;
 
-    client.users.cache.get(userID).send("**Command Ran: **"+msg.content+"\n**User: **"+msg.author.username+"\n**Channel: **"+msg.channel.name);
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Moderator command used')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
 
     const embed = new Discord.MessageEmbed()
-	  .setColor('#c28080')
-	  .setTitle('Banned '+user.username)
-	  .setDescription('Banning? Even better!')
-    .setTimestamp();
+      .setColor('#c28080')
+      .setTitle('Banned ' + user.username)
+      .setDescription('Banning? Even better!')
+      .setTimestamp();
 
     if (user) {
       const member = msg.guild.member(user);
       if (member) {
-        member.ban({reason: 'Because I said so.',})
-        .then(() => {
-          msg.channel.send(embed);
-        })
-        .catch(err => {
-          msg.reply('I was unable to ban the member');
-          console.error(err);
-        });
-      } 
-      else 
+        member.ban({ reason: 'Because I said so.', })
+          .then(() => {
+            msg.channel.send(embed);
+          })
+          .catch(err => {
+            msg.reply('I was unable to ban the member');
+            console.error(err);
+          });
+      }
+      else
         msg.reply("That user isn't in this server!");
-    } 
-    else 
+    }
+    else
       msg.reply("You didn't mention the user to ban!");
     return;
   }
 
   //Autoresponses
 
-  if (msg.channel.name=="mod-chat" 
-  || msg.channel.name=="mod-review" 
-  || msg.channel.name=="announcements")
+  if (msg.channel.name == "mod-chat"
+    || msg.channel.name == "mod-review"
+    || msg.channel.name == "announcements")
     return;
 
   for (let key of autoresponses.keys())
     if (msg.content.includes(key) && !msg.author.bot)
       msg.channel.send(autoresponses.get(key));
 
+});
+
+//Action Logging
+
+//Member Joined
+
+client.on('guildMemberAdd', member => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ff00')
+      .setTitle('Member joined')
+      .setDescription("**User: **<@"+member.id+"> ")
+      .setTimestamp();
+
+  member.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Member Left
+
+client.on('guildMemberRemove', member => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#ff0000')
+      .setTitle('Member left')
+      .setDescription("**User: **<@"+member.id+"> ")
+      .setTimestamp();
+
+  member.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Member Updated
+
+client.on('guildMemberUpdate', (oldM, newM) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ffff')
+      .setTitle('Member updated')
+      .setTimestamp();
+
+  if (oldM.displayName!=newM.displayName) {
+    embed.setTitle(newM.user.username+"'s nickname was changed!");
+    embed.setDescription("**Old Name: **"+oldM.displayName+"\n**New Name: **"+newM.displayName);
+    newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (oldM.roles.cache!=newM.roles.cache) {
+    var oldRoles = "**Old Roles** ";
+    var newRoles = "\n\n**New Roles**";
+    embed.setTitle(newM.user.username+"'s roles were updated!");
+    newM.roles.cache.forEach((r,i) => {
+      if (r.name=="@everyone");
+      else
+        newRoles+="\n"+r.name;
+    });
+    oldM.roles.cache.forEach((r,i) => {
+      if (r.name=="@everyone");
+      else 
+        oldRoles+="\n"+r.name;
+    });
+    embed.setDescription(oldRoles+newRoles);
+    newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+});
+
+//Message Deleted
+
+client.on('messageDelete', msg => {
+  if (msg.author.bot)
+    return;
+
+  const embed = new Discord.MessageEmbed()
+      .setColor('#ff0000')
+      .setTitle('Message deleted in #'+msg.channel.name)
+      .setDescription("**User: **<@"+msg.member.id+"> "+"\n**Message: **"+msg.content)
+      .setTimestamp();
+
+  msg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Message Edited
+
+client.on('messageUpdate', (oldmsg, newmsg) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ffff')
+      .setTitle('Message edited in #'+oldmsg.channel.name)
+      .setDescription("**User: **"+oldmsg.member.user.tag+"\n**Old Message: **"+oldmsg.content+"\n**New Message: **"+newmsg.content)
+      .setTimestamp();
+
+  newmsg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Voice Channels
+
+client.on('voiceStateUpdate', (oldstate, newstate) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ffff')
+      .setTimestamp();
+
+  //Voice Connect
+
+  if (oldstate.channelID==null) {
+    embed.setTitle(newstate.member.displayName + " connected");
+    embed.setDescription("**Channel: **🔈"+newstate.channel.name);
+  }
+
+  //Voice Disconnect
+
+  else if (newstate.channelID==null) {
+    embed.setTitle(newstate.member.displayName + " disconnected");
+    embed.setDescription("**Channel: **🔈"+oldstate.channel.name);
+  }
+
+  //Move Channels
+
+  else {
+    embed.setTitle(newstate.member.displayName + " moved");
+    embed.setDescription("**From: **🔈"+oldstate.channel.name+"\n**To: **🔈"+newstate.channel.name);
+  }
+
+  oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Member Banned
+
+client.on('guildBanAdd', (guild, member) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#ff0000')
+      .setTitle('Member banned')
+      .setDescription("**User: **"+member.tag)
+      .setTimestamp(); 
+
+  guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Member Unbanned
+
+client.on('guildBanRemove', (guild,member) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ff00')
+      .setTitle('Member unbanned')
+      .setDescription("**User: **"+member.tag)
+      .setTimestamp();
+
+  guild.channels.cache.find(i => i.name === "action-log").send(embed);
+});
+
+//Role Created
+
+client.on('roleCreate', role => {
+  const embed = new Discord.MessageEmbed()
+      .setColor(role.hexColor)
+      .setTitle('Role created')
+      .setDescription("**Name: **"+role.name)
+      .setTimestamp();
+  
+  role.guild.channels.cache.find(i => i.name === "action-log").send(embed)
+});
+
+//Role Removed
+
+client.on('roleDelete', role => {
+  const embed = new Discord.MessageEmbed()
+      .setColor(role.hexColor)
+      .setTitle('Role deleted')
+      .setDescription("**Name: **"+role.name)
+      .setTimestamp();
+  
+  role.guild.channels.cache.find(i => i.name === "action-log").send(embed)
+});
+
+//Channel or Category Created
+
+client.on('channelCreate', channel => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#00ff00')
+      .setTitle('Channel created')
+      .setTimestamp();
+
+  if (channel.type=="text") {
+    embed.setDescription("**Name: ** #"+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (channel.type=="voice") {
+    embed.setDescription("**Name: **🔈 "+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (channel.type=="category") {
+    embed.setTitle("Category created");
+    embed.setDescription("**Name: **"+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+});
+
+//Channel or Category Deleted
+
+client.on('channelDelete', channel => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#ff0000')
+      .setTitle('Channel removed')
+      .setTimestamp();
+
+  if (channel.type=="text") {
+    embed.setDescription("**Name: ** #"+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (channel.type=="voice") {
+    embed.setDescription("**Name: **🔈 "+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (channel.type=="category") {
+    embed.setTitle("Category removed");
+    embed.setDescription("**Name: **"+channel.name);
+    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+});
+
+//Channel or Category Updated
+
+client.on('channelUpdate', (oldCh, newCh) => {
+  const embed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Channel modified')
+      .setTimestamp();
+
+  if (oldCh.type=="text") {
+    embed.setDescription("**Old Channel: ** #"+oldCh.name+"\n**New Channel: ** #"+newCh.name);
+    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (oldCh.type=="voice") {
+    embed.setDescription("**Old Channel: ** 🔈"+oldCh.name+"\n**New Channel: ** 🔈"+newCh.name);
+    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
+
+  else if (oldCh.type=="category") {
+    embed.setTitle("Category modified");
+    embed.setDescription("**Old Category: **"+oldCh.name+"\n**New Category: ** 🔈"+newCh.name);
+    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  }
 });
