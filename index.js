@@ -7,6 +7,7 @@ let roles = new Map();
 let userID = "371052099850469377";
 var status;
 var token='';
+var ignore=false;
 
 keepAlive();
 
@@ -161,6 +162,7 @@ client.on('message', msg => {
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+    ignore = true;
     msg.channel.bulkDelete(1);
 
     msg.channel.startTyping();
@@ -212,6 +214,8 @@ client.on('message', msg => {
     if (!perms)
       return;
 
+    ignore = true;
+
     var userstatus = msg.content.substring(11);
     msg.channel.bulkDelete(1);
 
@@ -241,9 +245,10 @@ client.on('message', msg => {
   //!autoresponse: Adds autoresponse to bot.
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -293,9 +298,10 @@ client.on('message', msg => {
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -332,9 +338,10 @@ client.on('message', msg => {
   //!purge: Bulk deletes specified number of messages.
 
   if (msg.content.startsWith('!purge')) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -359,9 +366,10 @@ client.on('message', msg => {
   //!join: Bot connects to voice channel specified.
 
   if (msg.content.startsWith('!join') && !msg.author.bot) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -385,14 +393,17 @@ client.on('message', msg => {
   //!verify: Verifies user, giving them the Civil Engineer Role.
 
   if (msg.content.startsWith('!verify') && !msg.author.bot) {
-
     if (!perms)
       return;
 
+    ignore = true;
+
+    const user = msg.mentions.users.first();
+
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
-      .setTitle('Moderator command used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setTitle('Member verified')
+      .setDescription("**User: **<@"+user.id+">")
       .setTimestamp();
 
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
@@ -409,7 +420,7 @@ client.on('message', msg => {
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
     msg.channel.bulkDelete(1);
-    const user = msg.mentions.users.first();
+    
     if (user) {
       const memb = msg.guild.member(user);
       if (memb) {
@@ -428,9 +439,10 @@ client.on('message', msg => {
   //!kick: Kicks specified user.
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -441,8 +453,6 @@ client.on('message', msg => {
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-
 
     msg.channel.bulkDelete(1);
     const user = msg.mentions.users.first();
@@ -477,9 +487,10 @@ client.on('message', msg => {
   //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot) {
-
     if (!perms)
       return;
+
+    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -597,6 +608,11 @@ client.on('guildMemberUpdate', (oldM, newM) => {
 client.on('messageDelete', msg => {
   if (msg.author.bot)
     return;
+
+  if (ignore) {
+    ignore = false;
+    return;
+  }
 
   const embed = new Discord.MessageEmbed()
       .setColor('#ff0000')
