@@ -1,5 +1,6 @@
 const keepAlive = require('./server');
 const Discord = require('discord.js');
+var git = require('git-last-commit');
 var fs = require('fs');
 const client = new Discord.Client();
 let autoresponses = new Map();
@@ -134,11 +135,10 @@ client.on('message', msg => {
   //!ping: Pings the bot.
 
   if (msg.content === '!ping' && !msg.author.bot) {
-
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
       .setTitle('Bot pinged')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+      .setDescription("**User: **<@"+msg.author.id+">\n**Channel: **"+msg.channel.name)
       .setTimestamp();
 
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
@@ -146,7 +146,41 @@ client.on('message', msg => {
     client.users.cache.get(userID).send("Bot was pinged!\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
     msg.reply('pong!');
     return;
+  }
 
+  //!git: Returns git repository information.
+
+  if (msg.content=="!git" && !msg.author.bot) {
+
+    //Send embed with name of latest commit
+
+    var commitname=git.getLastCommit(function(err, commit) {
+      if (err)
+        throw err;
+      msg.channel.bulkDelete(1);
+      ignore = true;
+      var name=Object.values(commit)[2];
+      const embed = new Discord.MessageEmbed()
+      .setColor('#c28080')
+      .setTitle("GitHub Repository: jakesig/CivE-Bot")
+      .setDescription("https://github.com/jakesig/CivE-Bot\n\n**Latest Commit: **"+name)
+      .setThumbnail("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAi68fw3hBkE6l-vGLWYB9aRoSV5DWJ0zKJtAzpjYTMD83DwP5WU4D1N7eHx1ucPcZle8&usqp=CAU");
+      msg.channel.send(embed);
+    });
+
+    //Logging
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Git info requested')
+      .setDescription("**User: **<@"+msg.author.id+">\n**Channel: **"+msg.channel.name)
+      .setTimestamp();    
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+
+    client.users.cache.get(userID).send("Git Info Requested!\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+    return;
   }
 
   //!help: Prints out helpful information.
@@ -172,6 +206,7 @@ client.on('message', msg => {
       .setTitle('CivE Bot List of Commands')
       .setDescription(`!help: *Opens this menu.*
       !ping: *Pings the bot.*
+      !git: *Returns git repository information.*
       !kick {@member}: *Kicks member with name member.*
       !ban {@member}: *Bans member with name member.*
       !purge {number}: *Bulk deletes number of messages specified.*
@@ -179,13 +214,14 @@ client.on('message', msg => {
       !join {channel-name}: *Joins voice call with channel name specified.*
       !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
       !verify {@member}: *Assigns Civil Engineering role to member.*
-      !setstatus {status}: Sets the status of the bot.`)
+      !setstatus {status}: *Sets the status of the bot.*`)
       .setTimestamp();
 
     const embed = new Discord.MessageEmbed()
       .setColor('#c28080')
       .setTitle('CivE Bot List of Commands')
       .setDescription(`!help: *Opens this menu.*
+      !git: *Returns git repository information.*
       !ping: *Pings the bot.*`)
       .setTimestamp();
 
