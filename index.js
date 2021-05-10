@@ -159,12 +159,21 @@ client.on('message', msg => {
         throw err;
       msg.channel.bulkDelete(1);
       ignore = true;
+      var commitid=Object.values(commit)[1]
       var name=Object.values(commit)[2];
+      var branch=Object.values(commit)[10];
+      var a = new Date(Object.values(commit)[6] * 1000);
+      var months = [1,2,3,4,5,6,7,8,9,10,11,12];
+      var year = a.getFullYear();
+      var month = months[a.getMonth()];
+      var date = a.getDate();
+      var time = month+'/'+date + '/' + year;
       const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle("GitHub Repository: jakesig/CivE-Bot")
-      .setDescription("https://github.com/jakesig/CivE-Bot\n\n**Latest Commit: **"+name)
-      .setThumbnail("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAi68fw3hBkE6l-vGLWYB9aRoSV5DWJ0zKJtAzpjYTMD83DwP5WU4D1N7eHx1ucPcZle8&usqp=CAU");
+        .setColor('#c28080')
+        .setTitle("GitHub Repository: jakesig/CivE-Bot")
+        .setDescription("https://github.com/jakesig/CivE-Bot\n\n__**Latest Commit**__\n**Message: **"+name+"\n**Branch: **"+branch+"\n**Date: **"+time+"\n**ID: **"+commitid)
+        .setThumbnail("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAi68fw3hBkE6l-vGLWYB9aRoSV5DWJ0zKJtAzpjYTMD83DwP5WU4D1N7eHx1ucPcZle8&usqp=CAU");
+      console.log(commit);
       msg.channel.send(embed);
     });
 
@@ -236,7 +245,6 @@ client.on('message', msg => {
       msg.channel.send(embed);
       return;
     }
-
   }
 
   //Boolean that determines if a member has Admin permissions.
@@ -665,7 +673,7 @@ client.on('messageUpdate', (oldmsg, newmsg) => {
   const embed = new Discord.MessageEmbed()
       .setColor('#00ffff')
       .setTitle('Message edited in #'+oldmsg.channel.name)
-      .setDescription("**User: **"+oldmsg.member.user.tag+"\n**Old Message: **"+oldmsg.content+"\n**New Message: **"+newmsg.content)
+      .setDescription("**User: **<@"+oldmsg.member.id+">\n**Old Message: **"+oldmsg.content+"\n**New Message: **"+newmsg.content)
       .setTimestamp();
 
   newmsg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
