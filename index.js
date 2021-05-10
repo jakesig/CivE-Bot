@@ -333,7 +333,7 @@ client.on('message', msg => {
     });
 
     msg.channel.send(embed);
-    client.users.cache.get(userID).send(embed);
+    //client.users.cache.get(userID).send(embed);
     autoresponses.set(args[1], args[2]);
     return;
   }
