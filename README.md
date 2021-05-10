@@ -1,3 +1,5 @@
+# CivE Bot by Jake Sigman
+
 !help: Opens the help menu.
 
 !ping: Pings the bot.
