@@ -159,21 +159,21 @@ client.on('message', msg => {
         throw err;
       msg.channel.bulkDelete(1);
       ignore = true;
+
+      //Determine commit information, including the date
+
       var commitid=Object.values(commit)[1]
       var name=Object.values(commit)[2];
       var branch=Object.values(commit)[10];
-      var a = new Date(Object.values(commit)[6] * 1000);
-      var months = [1,2,3,4,5,6,7,8,9,10,11,12];
-      var year = a.getFullYear();
-      var month = months[a.getMonth()];
-      var date = a.getDate();
-      var time = month+'/'+date + '/' + year;
+      var s = new Date(Object.values(commit)[6]*1000).toLocaleDateString("en-US", {timeZone: "America/New_York"});
+
+      //Construct and send embed
+
       const embed = new Discord.MessageEmbed()
         .setColor('#c28080')
         .setTitle("GitHub Repository: jakesig/CivE-Bot")
-        .setDescription("https://github.com/jakesig/CivE-Bot\n\n__**Latest Commit**__\n**Message: **"+name+"\n**Branch: **"+branch+"\n**Date: **"+time+"\n**ID: **"+commitid)
+        .setDescription("https://github.com/jakesig/CivE-Bot\n\n__**Latest Commit**__\n**Message: **"+name+"\n**Branch: **"+branch+"\n**Date: **"+s+"\n**ID: **"+commitid)
         .setThumbnail("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAi68fw3hBkE6l-vGLWYB9aRoSV5DWJ0zKJtAzpjYTMD83DwP5WU4D1N7eHx1ucPcZle8&usqp=CAU");
-      console.log(commit);
       msg.channel.send(embed);
     });
 
