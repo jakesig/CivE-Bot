@@ -183,7 +183,7 @@ client.on('message', msg => {
       .setColor('#ffff00')
       .setTitle('Git info requested')
       .setDescription("**User: **<@"+msg.author.id+">\n**Channel: **"+msg.channel.name)
-      .setTimestamp();    
+      .setTimestamp();
 
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
@@ -220,7 +220,6 @@ client.on('message', msg => {
       !ban {@member}: *Bans member with name member.*
       !purge {number}: *Bulk deletes number of messages specified.*
       !echo {channel-name} {message}: *Echoes message in channel specified.*
-      !join {channel-name}: *Joins voice call with channel name specified.*
       !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
       !verify {@member}: *Assigns Civil Engineering role to member.*
       !setstatus {status}: *Sets the status of the bot.*`)
@@ -404,33 +403,6 @@ client.on('message', msg => {
     msg.channel.bulkDelete(messagecount).catch(err => {
       msg.channel.send(`You didn't type it correctly, try again.`);
     });
-    return;
-  }
-
-  //!join: Bot connects to voice channel specified.
-
-  if (msg.content.startsWith('!join') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Moderator command used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    const channel = client.channels.cache.find(i => i.name === msg.content.substring(6));
-    if (!channel)
-      return console.error("The channel does not exist!");
-    channel.join().then(connection => {
-      console.log("Successfully connected.");
-    }).catch(e => { console.error(e); });
     return;
   }
 
@@ -622,29 +594,33 @@ client.on('guildMemberUpdate', (oldM, newM) => {
       .setTitle('Member updated')
       .setTimestamp();
 
+  //Nickname Updated
+
   if (oldM.displayName!=newM.displayName) {
     embed.setTitle(newM.user.username+"'s nickname was changed!");
     embed.setDescription("**Old Name: **"+oldM.displayName+"\n**New Name: **"+newM.displayName);
     newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
   }
 
-  else if (oldM.roles.cache!=newM.roles.cache) {
-    var oldRoles = "**Old Roles** ";
-    var newRoles = "\n\n**New Roles**";
-    embed.setTitle(newM.user.username+"'s roles were updated!");
-    newM.roles.cache.forEach((r,i) => {
-      if (r.name=="@everyone");
-      else
-        newRoles+="\n"+r.name;
-    });
-    oldM.roles.cache.forEach((r,i) => {
-      if (r.name=="@everyone");
-      else 
-        oldRoles+="\n"+r.name;
-    });
-    embed.setDescription(oldRoles+newRoles);
-    newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
+  //Roles Updated: Not working 
+
+  // else if (oldM.roles.cache!=newM.roles.cache) {
+  //   var oldRoles = "**Old Roles** ";
+  //   var newRoles = "\n\n**New Roles**";
+  //   embed.setTitle(newM.user.username+"'s roles were updated!");
+  //   newM.roles.cache.forEach((r,i) => {
+  //     if (r.name=="@everyone");
+  //     else
+  //       newRoles+="\n"+r.name;
+  //   });
+  //   oldM.roles.cache.forEach((r,i) => {
+  //     if (r.name=="@everyone");
+  //     else 
+  //       oldRoles+="\n"+r.name;
+  //   });
+  //   embed.setDescription(oldRoles+newRoles);
+  //   newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  // }
 });
 
 //Message Deleted
