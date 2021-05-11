@@ -19,3 +19,5 @@
 !echo {channel-name} {message}: Posts message in channel specified.
 
 !verify {@member}: Assigns Civil Engineering role to member, giving them access to the server.
+
+!specverify {@member}: Assigns Spectator role to member.
