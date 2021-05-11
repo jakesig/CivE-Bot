@@ -77,7 +77,7 @@ client.on('guildMemberAdd', member => {
 
   //Ruman and Sohaib
 
-  else if (roles.get(member.id) == "Ruman" || roles.get(member.id) == "Sohaib") {
+  else if (roles.get(member.id) == "Ruman" || roles.get(member.id) == "Sohaib" || roles.get(member.id) == "Eytan") {
     member.roles.add(spec);
   }
 
