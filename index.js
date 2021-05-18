@@ -699,7 +699,8 @@ client.on('messageUpdate', (oldmsg, newmsg) => {
       .setDescription("**User: **<@"+oldmsg.member.id+">\n**Old Message: **"+oldmsg.content+"\n**New Message: **"+newmsg.content)
       .setTimestamp();
 
-  newmsg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
+  if (oldmsg.content != newmsg.content)
+    newmsg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
 });
 
 //Voice Channels
