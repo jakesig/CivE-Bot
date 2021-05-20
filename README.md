@@ -1,23 +1,25 @@
 # CivE Bot by Jake Sigman
 
-!help: Opens the help menu.
+!help: *Opens the help menu.*
 
-!ping: Pings the bot.
+!ping: *Pings the bot.*
 
-!git: Returns git repository information.
+!git: Returns *git repository information.*
 
-!setstatus {status}: Sets the status of the bot.
+!rolelist {role-name}: *Lists members with role name specified.*
 
-!autoresponse {prompt} {response}: Adds autoresponse to bot with prompt and response respectively.
+!setstatus {status}: *Sets the status of the bot.*
 
-!kick {@member}: Kicks member with name member.
+!autoresponse {prompt} {response}: *Adds autoresponse to bot with prompt and response respectively.*
 
-!ban {@member}: Bans member with name member.
+!kick {@member}: *Kicks member with name member.*
 
-!purge {number}: Bulk deletes number of messages specified.
+!ban {@member}: *Bans member with name member.*
 
-!echo {channel-name} {message}: Posts message in channel specified.
+!purge {number}: *Bulk deletes number of messages specified.*
 
-!verify {@member}: Assigns Civil Engineering role to member, giving them access to the server.
+!echo {channel-name} {message}: *Posts message in channel specified.*
 
-!specverify {@member}: Assigns Spectator role to member.
+!verify {@member}: *Assigns Civil Engineering role to member, giving them access to the server.*
+
+!specverify {@member}: *Assigns Spectator role to member.*

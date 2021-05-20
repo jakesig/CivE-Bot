@@ -6,6 +6,7 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = "371052099850469377";
+var online = 0;
 var status;
 var token='';
 var ignore=false;
@@ -53,11 +54,55 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity(status);
   client.users.cache.get(userID).send("The bot is alive!");
+
+  //Keeps track of member count and members online.
+
+  const guild = client.guilds.cache.get("810647926107275294");
+  var memberCountChannel = client.channels.cache.get("844736967635238932");
+  var memberCount = guild.memberCount-2;
+  memberCountChannel.setName("Member Count: " + memberCount);
+
+  var onlineCountChannel = client.channels.cache.get("844827563045552128");
+  var onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
+  onlineCountChannel.setName("Members Online: " + onlineCount);
+
+});
+
+//Updates online members when a presence updates.
+
+client.on('presenceUpdate', (oldPr, newPr) => {
+  if (newPr.member.user.bot)
+    return;
+
+  const guild = client.guilds.cache.get("810647926107275294");
+  var onlineCountChannel = client.channels.cache.get("844827563045552128");
+  var onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
+
+  if ((online != onlineCount) && (oldPr) && oldPr.status != newPr.status && (oldPr.status == "offline" || newPr.status == "offline")) {
+    onlineCountChannel.setName("Members Online: " + onlineCount);
+    online = onlineCount;
+  }
+});
+
+client.on('rateLimit', (info) => {
+  console.err(info.timeout);
 });
 
 //On member add
 
 client.on('guildMemberAdd', member => {
+
+  //Check if bot
+
+  if (member.bot)
+    return;
+
+  //Update member count
+  
+  const guild = client.guilds.cache.get("810647926107275294");
+  var memberCountChannel = client.channels.cache.get("844736967635238932");
+  var memberCount = guild.memberCount-2;
+  memberCountChannel.setName("Member Count: " + memberCount);
 
   //Roles  
 
@@ -223,7 +268,8 @@ client.on('message', msg => {
       !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
       !verify {@member}: *Assigns Civil Engineering role to member.*
       !specverify {@member}: *Assigns Spectator role to member.*
-      !setstatus {status}: *Sets the status of the bot.*`)
+      !setstatus {status}: *Sets the status of the bot.*
+      !rolelist {role-name}: *Lists members with role name specified.*`)
       .setTimestamp();
 
     const embed = new Discord.MessageEmbed()
@@ -231,7 +277,8 @@ client.on('message', msg => {
       .setTitle('CivE Bot List of Commands')
       .setDescription(`!help: *Opens this menu.*
       !git: *Returns git repository information.*
-      !ping: *Pings the bot.*`)
+      !ping: *Pings the bot.*
+      !rolelist {role-name}: *Lists members with role name specified.*`)
       .setTimestamp();
 
     msg.channel.stopTyping();
@@ -245,6 +292,48 @@ client.on('message', msg => {
       msg.channel.send(embed);
       return;
     }
+  }
+
+  //!rolelist: Lists members with given role.
+
+  if (msg.content.startsWith('!rolelist') && !msg.author.bot) {
+    var rolename = msg.content.substring(10);
+    var role = msg.guild.roles.cache.find(role => role.name === rolename);
+
+    msg.channel.bulkDelete(1);
+
+    if(!role) {
+      msg.reply('that role does not exist!');
+      return;
+    }
+
+    //Logging
+
+    const msgembed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('Role list requested')
+      .setDescription("**User: **<@"+msg.author.id+"> \n**Role: **"+rolename+"\n**Channel: **"+msg.channel.name)
+      .setTimestamp();
+
+    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+    ignore = true;
+
+    //Gather members and send list of them.
+
+    let arr = new Array();
+    role.members.forEach(user => {
+      arr.push(`${user.user.username}`);
+    });
+
+    const embed = new Discord.MessageEmbed()
+      .setColor(role.hexColor)
+      .setTitle(`Members with role "`+rolename+`"`)
+      .setDescription(arr.join('\n'))
+      .setTimestamp();
+
+    msg.channel.send(embed);
   }
 
   //Boolean that determines if a member has Admin permissions.
@@ -624,6 +713,14 @@ client.on('guildMemberAdd', member => {
 //Member Left
 
 client.on('guildMemberRemove', member => {
+
+  //Update member count
+  
+  const guild = client.guilds.cache.get("810647926107275294");
+  var memberCountChannel = client.channels.cache.get("844736967635238932");
+  var memberCount = guild.memberCount-2;
+  memberCountChannel.setName("Member Count: " + memberCount);
+
   const embed = new Discord.MessageEmbed()
       .setColor('#ff0000')
       .setTitle('Member left')
@@ -842,6 +939,9 @@ client.on('channelUpdate', (oldCh, newCh) => {
       .setColor('#ffff00')
       .setTitle('Channel modified')
       .setTimestamp();
+
+  if (oldCh.name.startsWith("Member"))
+    return;
 
   if (oldCh.type=="text") {
     embed.setDescription("**Old Channel: ** #"+oldCh.name+"\n**New Channel: ** #"+newCh.name);
