@@ -1,11 +1,13 @@
-
 const Discord = require('discord.js');
 var git = require('git-last-commit');
 var fs = require('fs');
 
 const keepAlive = require('./server.js');
 const log = require('./log.js');
+const welcome = require('./welcome.js');
+
 const echo = require('./cmd/echo.js');
+const help = require('./cmd/help.js');
 const ban = require('./cmd/ban.js');
 const kick = require('./cmd/kick.js');
 const purge = require('./cmd/purge.js');
@@ -104,64 +106,7 @@ client.on('rateLimit', (info) => {
 //On member add
 
 client.on('guildMemberAdd', member => {
-
-  //Check if bot
-
-  if (member.bot)
-    return;
-
-  //Update member count
-  
-  const guild = client.guilds.cache.get("810647926107275294");
-  var memberCountChannel = client.channels.cache.get("844736967635238932");
-  var memberCount = guild.memberCount-2;
-  memberCountChannel.setName("Member Count: " + memberCount);
-
-  //Roles  
-
-  var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-  var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
-  var spec = member.guild.roles.cache.find(role => role.name === "Spectator");
-  var ben = member.guild.roles.cache.find(role => role.name === "not ben");
-  var mod = member.guild.roles.cache.find(role => role.name === "Moderator");
-
-  //Ben
-
-  if (roles.get(member.id) == "Ben") {
-    member.setNickname("not ben");
-    member.roles.add(spec);
-    member.roles.add(ben);
-  }
-
-  //Ruman and Sohaib
-
-  else if (roles.get(member.id) == "Ruman" || roles.get(member.id) == "Sohaib" || roles.get(member.id) == "Eytan") {
-    member.roles.add(spec);
-  }
-
-  //Josh
-
-  else if (roles.get(member.id) == "Josh") {
-    member.roles.add(civ);
-  }
-
-  //Everyone else
-
-  else {
-    member.roles.add(pend);
-    member.guild.channels.cache.find(i => i.name === "mod-chat").send("<@"+member.user.id+"> has joined. "+"<@&"+mod.id+"> please assign a role.");
-  }
-
-  //Welcome message
-
-  const embed = new Discord.MessageEmbed()
-    .setColor('#c28080')
-    .setTitle('Welcome ' + member.user.username + '!')
-    .setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
-    .setTimestamp();
-
-  member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
-  
+  welcome(client, member, roles); 
 });
 
 //Message handler
@@ -251,57 +196,7 @@ client.on('message', msg => {
   //!help: Prints out helpful information.
 
   if (msg.content === '!help' && !msg.author.bot) {
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Help requested')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-    msg.channel.bulkDelete(1);
-
-    msg.channel.startTyping();
-
-    const mod_embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('CivE Bot List of Commands')
-      .setDescription(`!help: *Opens this menu.*
-      !ping: *Pings the bot.*
-      !git: *Returns git repository information.*
-      !kick {@member}: *Kicks member with name member.*
-      !ban {@member}: *Bans member with name member.*
-      !purge {number}: *Bulk deletes number of messages specified.*
-      !echo {channel-name} {message}: *Echoes message in channel specified.*
-      !autoresponse {prompt} {response}: *Adds autoresponse to bot.*
-      !verify {@member}: *Assigns Civil Engineering role to member.*
-      !specverify {@member}: *Assigns Spectator role to member.*
-      !setstatus {status}: *Sets the status of the bot.*
-      !rolelist {role-name}: *Lists members with role name specified.*`)
-      .setTimestamp();
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('CivE Bot List of Commands')
-      .setDescription(`!help: *Opens this menu.*
-      !git: *Returns git repository information.*
-      !ping: *Pings the bot.*
-      !rolelist {role-name}: *Lists members with role name specified.*`)
-      .setTimestamp();
-
-    msg.channel.stopTyping();
-
-    if (msg.channel.name === 'mod-chat' || msg.channel.name === 'mod-log') {
-      msg.channel.send(mod_embed);
-      return;
-    }
-
-    else {
-      msg.channel.send(embed);
-      return;
-    }
+    help(client, msg, perms);
   }
 
   //!rolelist: Lists members with given role.
