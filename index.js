@@ -1,7 +1,18 @@
-const keepAlive = require('./server');
+
 const Discord = require('discord.js');
 var git = require('git-last-commit');
 var fs = require('fs');
+
+const keepAlive = require('./server.js');
+const log = require('./log.js');
+const echo = require('./cmd/echo.js');
+const ban = require('./cmd/ban.js');
+const kick = require('./cmd/kick.js');
+const purge = require('./cmd/purge.js');
+const verify = require('./cmd/verify.js');
+const specverify = require('./cmd/specverify.js');
+const setstatus = require('./cmd/setstatus.js');
+
 const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
@@ -9,9 +20,9 @@ let userID = "371052099850469377";
 var online = 0;
 var status;
 var token='';
-var ignore=false;
 
 keepAlive();
+log(client);
 
 //Reads the autoresponses in the file auto.txt.
 
@@ -84,6 +95,8 @@ client.on('presenceUpdate', (oldPr, newPr) => {
   }
 });
 
+//Check if rate limit
+
 client.on('rateLimit', (info) => {
   console.err(info.timeout);
 });
@@ -149,7 +162,6 @@ client.on('guildMemberAdd', member => {
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
   
-
 });
 
 //Message handler
@@ -203,7 +215,6 @@ client.on('message', msg => {
       if (err)
         throw err;
       msg.channel.bulkDelete(1);
-      ignore = true;
 
       //Determine commit information, including the date
 
@@ -250,7 +261,6 @@ client.on('message', msg => {
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-    ignore = true;
     msg.channel.bulkDelete(1);
 
     msg.channel.startTyping();
@@ -318,8 +328,6 @@ client.on('message', msg => {
     msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
-    ignore = true;
-
     //Gather members and send list of them.
 
     let arr = new Array();
@@ -344,35 +352,7 @@ client.on('message', msg => {
   //!setstatus: Sets the status of the bot.
 
   if (msg.content.startsWith('!setstatus') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    var userstatus = msg.content.substring(11);
-    msg.channel.bulkDelete(1);
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Status set')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**New status: **Playing **"+userstatus+"**"+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('Status set!')
-      .setDescription("**New status: **Playing **"+userstatus+"**")
-      .setTimestamp();
-
-    msg.channel.send(embed);
-
-    fs.writeFileSync('status.txt', userstatus, 'utf8', (err) => {
-        if (err) throw err;
-    });
-
-    client.user.setActivity(userstatus);
+    setstatus(client, msg, perms);
   }
 
   //!autoresponse: Adds autoresponse to bot.
@@ -380,8 +360,6 @@ client.on('message', msg => {
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
     if (!perms)
       return;
-
-    ignore = true;
 
     const msgembed = new Discord.MessageEmbed()
       .setColor('#ffff00')
@@ -431,256 +409,37 @@ client.on('message', msg => {
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Echo used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    msg.channel.bulkDelete(1);
-
-    var args = msg.content.substring(1).split(" ");
-    let write = new String(args[2]);
-    var i;
-
-    if (!msg.guild.channels.cache.find(i => i.name === args[1])) {
-      msg.reply("Invalid channel!");
-      return;
-    }
-
-    if (args.length > 3) {
-      for (i = 3; i < args.length; i++) {
-        write += " " + args[i];
-      }
-      msg.guild.channels.cache.find(i => i.name === args[1]).send(write);
-      return;
-    }
-    msg.guild.channels.cache.find(i => i.name === args[1]).send(args[2]);
-    return;
+    echo(client, msg, perms);
   }
 
   //!purge: Bulk deletes specified number of messages.
 
   if (msg.content.startsWith('!purge')) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Moderator command used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    var args = msg.content.substring(1).split(" ");
-
-    let messagecount = parseInt(args[1]) + 1;
-
-    msg.channel.bulkDelete(messagecount).catch(err => {
-      msg.channel.send(`You didn't type it correctly, try again.`);
-    });
-    return;
+    purge(client, msg, perms);
   }
 
   //!verify: Verifies user, giving them the Civil Engineer Role.
 
   if (msg.content.startsWith('!verify') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const user = msg.mentions.users.first();
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Member verified')
-      .setDescription("**User: **<@"+user.id+">")
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('Verified ' + user.username + "!")
-      .setDescription('Civil Engineer role assigned.')
-      .setTimestamp();
-
-    var pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-    var civ = msg.member.guild.roles.cache.find(role => role.name === "Civil Engineer");
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    msg.channel.bulkDelete(1);
-    
-    if (user) {
-      const memb = msg.guild.member(user);
-      if (memb) {
-        memb.roles.remove(pend);
-        memb.roles.add(civ);
-        msg.channel.send(embed);
-      }
-      else
-        msg.reply("Can't find user.");
-    }
-    else
-      msg.reply("No user mentioned.");
-
+    verify(client, msg, perms);
   }
 
   //!specverify: Verifies user, giving them the Spectator Role.
 
   if (msg.content.startsWith('!specverify') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const user = msg.mentions.users.first();
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Member verified (Spectator)')
-      .setDescription("**User: **<@"+user.id+">")
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('Verified ' + user.username + "! (Spectator)")
-      .setDescription('Civil Engineer role assigned.')
-      .setTimestamp();
-
-    var pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-    var spec = msg.member.guild.roles.cache.find(role => role.name === "Spectator");
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    msg.channel.bulkDelete(1);
-    
-    if (user) {
-      const memb = msg.guild.member(user);
-      if (memb) {
-        memb.roles.remove(pend);
-        memb.roles.add(spec);
-        msg.channel.send(embed);
-      }
-      else
-        msg.reply("Can't find user.");
-    }
-    else
-      msg.reply("No user mentioned.");
-
+    specverify(client, msg, perms);
   }
 
   //!kick: Kicks specified user.
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Moderator command used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    msg.channel.bulkDelete(1);
-    const user = msg.mentions.users.first();
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('Kicked ' + user.username)
-      .setDescription('I love kicking.')
-      .setTimestamp();
-
-    if (user) {
-      const member = msg.guild.member(user);
-      if (member) {
-        member
-          .kick('null')
-          .then(() => {
-            msg.channel.send(embed);
-          })
-          .catch(err => {
-            msg.reply('I was unable to kick the member');
-            console.error(err);
-          });
-      }
-      else
-        msg.reply("That user isn't in this server!");
-    }
-    else
-      msg.reply("You didn't mention the user to kick!");
-    return;
+    kick(client, msg, perms);
   }
 
   //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot) {
-    if (!perms)
-      return;
-
-    ignore = true;
-
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Moderator command used')
-      .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
-
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
-
-    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-
-    msg.channel.bulkDelete(1);
-    const user = msg.mentions.users.first();
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#c28080')
-      .setTitle('Banned ' + user.username)
-      .setDescription('Banning? Even better!')
-      .setTimestamp();
-
-    if (user) {
-      const member = msg.guild.member(user);
-      if (member) {
-        member.ban({ reason: 'Because I said so.', })
-          .then(() => {
-            msg.channel.send(embed);
-          })
-          .catch(err => {
-            msg.reply('I was unable to ban the member');
-            console.error(err);
-          });
-      }
-      else
-        msg.reply("That user isn't in this server!");
-    }
-    else
-      msg.reply("You didn't mention the user to ban!");
-    return;
+    ban(client, msg, perms);
   }
 
   //Autoresponses
@@ -694,268 +453,4 @@ client.on('message', msg => {
     if (msg.content.includes(key) && !msg.author.bot)
       msg.channel.send(autoresponses.get(key));
 
-});
-
-//Action Logging
-
-//Member Joined
-
-client.on('guildMemberAdd', member => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ff00')
-      .setTitle('Member joined')
-      .setDescription("**User: **<@"+member.id+"> ")
-      .setTimestamp();
-
-  member.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Member Left
-
-client.on('guildMemberRemove', member => {
-
-  //Update member count
-  
-  const guild = client.guilds.cache.get("810647926107275294");
-  var memberCountChannel = client.channels.cache.get("844736967635238932");
-  var memberCount = guild.memberCount-2;
-  memberCountChannel.setName("Member Count: " + memberCount);
-
-  const embed = new Discord.MessageEmbed()
-      .setColor('#ff0000')
-      .setTitle('Member left')
-      .setDescription("**User: **<@"+member.id+"> ")
-      .setTimestamp();
-
-  member.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Member Updated
-
-client.on('guildMemberUpdate', (oldM, newM) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ffff')
-      .setTitle('Member updated')
-      .setTimestamp();
-
-  //Nickname Updated
-
-  if (oldM.displayName!=newM.displayName) {
-    embed.setTitle(newM.user.username+"'s nickname was changed!");
-    embed.setDescription("**Old Name: **"+oldM.displayName+"\n**New Name: **"+newM.displayName);
-    newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  //Roles Updated: Not working 
-
-  // else if (oldM.roles.cache!=newM.roles.cache) {
-  //   var oldRoles = "**Old Roles** ";
-  //   var newRoles = "\n\n**New Roles**";
-  //   embed.setTitle(newM.user.username+"'s roles were updated!");
-  //   newM.roles.cache.forEach((r,i) => {
-  //     if (r.name=="@everyone");
-  //     else
-  //       newRoles+="\n"+r.name;
-  //   });
-  //   oldM.roles.cache.forEach((r,i) => {
-  //     if (r.name=="@everyone");
-  //     else 
-  //       oldRoles+="\n"+r.name;
-  //   });
-  //   embed.setDescription(oldRoles+newRoles);
-  //   newM.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  // }
-});
-
-//Message Deleted
-
-client.on('messageDelete', msg => {
-  if (msg.author.bot)
-    return;
-
-  if (ignore) {
-    ignore = false;
-    return;
-  }
-
-  const embed = new Discord.MessageEmbed()
-      .setColor('#ff0000')
-      .setTitle('Message deleted in #'+msg.channel.name)
-      .setDescription("**User: **<@"+msg.member.id+"> "+"\n**Message: **"+msg.content)
-      .setTimestamp();
-
-  msg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Message Edited
-
-client.on('messageUpdate', (oldmsg, newmsg) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ffff')
-      .setTitle('Message edited in #'+oldmsg.channel.name)
-      .setDescription("**User: **<@"+oldmsg.member.id+">\n**Old Message: **"+oldmsg.content+"\n**New Message: **"+newmsg.content)
-      .setTimestamp();
-
-  if (oldmsg.content != newmsg.content)
-    newmsg.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Voice Channels
-
-client.on('voiceStateUpdate', (oldstate, newstate) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ffff')
-      .setTimestamp();
-
-  //Voice Connect
-
-  if (oldstate.channelID==null) {
-    embed.setTitle(newstate.member.displayName + " connected");
-    embed.setDescription("**Channel: **🔈"+newstate.channel.name);
-    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  //Voice Disconnect
-
-  else if (newstate.channelID==null) {
-    embed.setTitle(newstate.member.displayName + " disconnected");
-    embed.setDescription("**Channel: **🔈"+oldstate.channel.name);
-    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  //Move Channels
-
-  else if (newstate.channelID!=oldstate.channelID) {
-    embed.setTitle(newstate.member.displayName + " moved");
-    embed.setDescription("**From: **🔈"+oldstate.channel.name+"\n**To: **🔈"+newstate.channel.name);
-    oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  
-});
-
-//Member Banned
-
-client.on('guildBanAdd', (guild, member) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#ff0000')
-      .setTitle('Member banned')
-      .setDescription("**User: **"+member.tag)
-      .setTimestamp(); 
-
-  guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Member Unbanned
-
-client.on('guildBanRemove', (guild,member) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ff00')
-      .setTitle('Member unbanned')
-      .setDescription("**User: **"+member.tag)
-      .setTimestamp();
-
-  guild.channels.cache.find(i => i.name === "action-log").send(embed);
-});
-
-//Role Created
-
-client.on('roleCreate', role => {
-  const embed = new Discord.MessageEmbed()
-      .setColor(role.hexColor)
-      .setTitle('Role created')
-      .setDescription("**Name: **"+role.name)
-      .setTimestamp();
-  
-  role.guild.channels.cache.find(i => i.name === "action-log").send(embed)
-});
-
-//Role Removed
-
-client.on('roleDelete', role => {
-  const embed = new Discord.MessageEmbed()
-      .setColor(role.hexColor)
-      .setTitle('Role deleted')
-      .setDescription("**Name: **"+role.name)
-      .setTimestamp();
-  
-  role.guild.channels.cache.find(i => i.name === "action-log").send(embed)
-});
-
-//Channel or Category Created
-
-client.on('channelCreate', channel => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#00ff00')
-      .setTitle('Channel created')
-      .setTimestamp();
-
-  if (channel.type=="text") {
-    embed.setDescription("**Name: ** #"+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (channel.type=="voice") {
-    embed.setDescription("**Name: **🔈 "+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (channel.type=="category") {
-    embed.setTitle("Category created");
-    embed.setDescription("**Name: **"+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-});
-
-//Channel or Category Deleted
-
-client.on('channelDelete', channel => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#ff0000')
-      .setTitle('Channel removed')
-      .setTimestamp();
-
-  if (channel.type=="text") {
-    embed.setDescription("**Name: ** #"+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (channel.type=="voice") {
-    embed.setDescription("**Name: **🔈 "+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (channel.type=="category") {
-    embed.setTitle("Category removed");
-    embed.setDescription("**Name: **"+channel.name);
-    channel.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-});
-
-//Channel or Category Updated
-
-client.on('channelUpdate', (oldCh, newCh) => {
-  const embed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Channel modified')
-      .setTimestamp();
-
-  if (oldCh.name.startsWith("Member"))
-    return;
-
-  if (oldCh.type=="text") {
-    embed.setDescription("**Old Channel: ** #"+oldCh.name+"\n**New Channel: ** #"+newCh.name);
-    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (oldCh.type=="voice") {
-    embed.setDescription("**Old Channel: ** 🔈"+oldCh.name+"\n**New Channel: ** 🔈"+newCh.name);
-    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
-
-  else if (oldCh.type=="category") {
-    embed.setTitle("Category modified");
-    embed.setDescription("**Old Category: **"+oldCh.name+"\n**New Category: ** 🔈"+newCh.name);
-    newCh.guild.channels.cache.find(i => i.name === "action-log").send(embed);
-  }
 });
