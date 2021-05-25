@@ -35,7 +35,8 @@ function func(client, msg, perms) {
     !verify {@member}: *Assigns Civil Engineering role to member.*
     !specverify {@member}: *Assigns Spectator role to member.*
     !setstatus {status}: *Sets the status of the bot.*
-    !rolelist {role-name}: *Lists members with role name specified.*`)
+    !rolelist {role-name}: *Lists members with role name specified.*
+    !poll "Question" "Option 1" "Option 2" etc. : *Sends out poll with reactions.*`)
     .setTimestamp();
 
   const embed = new Discord.MessageEmbed()
@@ -44,7 +45,8 @@ function func(client, msg, perms) {
     .setDescription(`!help: *Opens this menu.*
     !git: *Returns git repository information.*
     !ping: *Pings the bot.*
-    !rolelist {role-name}: *Lists members with role name specified.*`)
+    !rolelist {role-name}: *Lists members with role name specified.*
+    !poll "Question" "Option 1" "Option 2" etc. : *Sends out poll with reactions.*`)
     .setTimestamp();
 
   msg.channel.stopTyping();
