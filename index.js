@@ -1,9 +1,15 @@
+//Library Imports
+
 const Discord = require('discord.js');
 const fs = require('fs');
+
+//Local Imports
 
 const keepAlive = require('./server.js');
 const log = require('./log.js');
 const welcome = require('./welcome.js');
+
+//Command Imports
 
 const echo = require('./cmd/echo.js');
 const autoresponse = require('./cmd/autoresponse.js');
@@ -16,6 +22,9 @@ const verify = require('./cmd/verify.js');
 const rolelist = require('./cmd/rolelist.js');
 const specverify = require('./cmd/specverify.js');
 const setstatus = require('./cmd/setstatus.js');
+const poll = require('./cmd/poll.js');
+
+//Variables
 
 const client = new Discord.Client();
 let autoresponses = new Map();
@@ -24,6 +33,8 @@ let userID = "371052099850469377";
 var online = 0;
 var status;
 var token='';
+
+//Functions
 
 keepAlive();
 log(client);
@@ -102,13 +113,13 @@ client.on('presenceUpdate', (oldPr, newPr) => {
 //Check if rate limit
 
 client.on('rateLimit', (info) => {
-  console.err(info.timeout);
+  console.log(info.timeout);
 });
 
 //On member add
 
 client.on('guildMemberAdd', member => {
-  welcome(client, member, roles); 
+  welcome(client, member, roles);
 });
 
 //Message handler
@@ -162,6 +173,12 @@ client.on('message', msg => {
 
   if (msg.content === '!help' && !msg.author.bot) {
     help(client, msg, perms);
+  }
+
+  //!poll: Sends message with reactions for a poll.
+
+  if (msg.content.startsWith('!poll') && !msg.author.bot) {
+    poll(client, msg, perms);
   }
 
   //!rolelist: Lists members with given role.

@@ -3,15 +3,10 @@ let userID = "371052099850469377";
 
 function func(client, msg, perms) {
   
+  //Variables
+
   var rolename = msg.content.substring(10);
   var role = msg.guild.roles.cache.find(role => role.name === rolename);
-
-  msg.channel.bulkDelete(1);
-
-  if(!role) {
-    msg.reply('that role does not exist!');
-    return;
-  }
 
   //Logging
 
@@ -24,7 +19,16 @@ function func(client, msg, perms) {
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
   client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
-  //Gather members and send list of them.
+  //Delete invocation and confirm the role exists
+
+  msg.channel.bulkDelete(1);
+
+  if(!role) {
+    msg.reply('that role does not exist!');
+    return;
+  }
+
+  //Gather members and send a list of them
 
   let arr = new Array();
   role.members.forEach(user => {
@@ -38,7 +42,7 @@ function func(client, msg, perms) {
     .setTimestamp();
 
   msg.channel.send(embed);
-    
+  return;
 }
 
 module.exports = func;

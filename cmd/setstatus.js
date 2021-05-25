@@ -4,11 +4,12 @@ let userID = "371052099850469377";
 
 function func(client, msg, perms) {
   
-  if (!perms)
-      return;
+  //Checking for permissions
 
-  var userstatus = msg.content.substring(11);
-  msg.channel.bulkDelete(1);
+  if (!perms)
+    return;
+
+  //Logging
 
   const msgembed = new Discord.MessageEmbed()
     .setColor('#ffff00')
@@ -17,6 +18,14 @@ function func(client, msg, perms) {
     .setTimestamp();
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+  client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+  //Delete invocation, determine status to set
+
+  msg.channel.bulkDelete(1);
+  var userstatus = msg.content.substring(11);
+  
+  //Embed construction
 
   const embed = new Discord.MessageEmbed()
     .setColor('#c28080')
@@ -25,6 +34,8 @@ function func(client, msg, perms) {
     .setTimestamp();
 
   msg.channel.send(embed);
+
+  //Save the status in case the bot reboots
 
   fs.writeFileSync('status.txt', userstatus, 'utf8', (err) => {
       if (err) throw err;
