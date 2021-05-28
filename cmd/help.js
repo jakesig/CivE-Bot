@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-function func(client, msg, perms, userID) {
+function func(client, msg, userID) {
   
   //Logging
 

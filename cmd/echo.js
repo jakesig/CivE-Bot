@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {
-  
+
   //Checking for permissions
 
   if (!perms)

@@ -23,6 +23,7 @@ const rolelist = require('./cmd/rolelist.js');
 const specverify = require('./cmd/specverify.js');
 const setstatus = require('./cmd/setstatus.js');
 const poll = require('./cmd/poll.js');
+const ping = require('./cmd/ping.js');
 
 //Variables
 
@@ -134,6 +135,18 @@ client.on('message', msg => {
     return;
   }
 
+  //Checks if the bot sent the message
+
+  if (msg.author.bot) {
+    return;
+  }
+
+  //Boolean that determines if a member has Admin permissions.
+
+  if (msg.member) {
+    var perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
+  }
+
   //Moderation
 
   if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")
@@ -147,38 +160,62 @@ client.on('message', msg => {
 
   //Commands
 
-  //!ping: Pings the bot.
+  switch (msg.content) {
 
-  if (msg.content === '!ping' && !msg.author.bot) {
-    const msgembed = new Discord.MessageEmbed()
-      .setColor('#ffff00')
-      .setTitle('Bot pinged')
-      .setDescription("**User: **<@"+msg.author.id+">\n**Channel: **"+msg.channel.name)
-      .setTimestamp();
+    //!git: Returns git repository information.
 
-    msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
+    case "!git":
+      git(client, msg, userID);
+      return;
 
-    client.users.cache.get(userID).send("Bot was pinged!\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-    msg.reply('pong!');
-    return;
+    //!help: Prints out helpful information.
+
+    case "!help":
+      help(client, msg, userID);
+      return;
+
+    //!ping: Pings the bot.
+
+    case "!ping":
+      ping(client, msg, userID);
+      return;
+    
+    //Default case
+
+    default:
+      break;
   }
 
-  //!git: Returns git repository information.
+  switch (msg.content.substr(0,5)) {
 
-  if (msg.content=="!git" && !msg.author.bot) {
-    git(client, msg, perms, userID);
-  }
+    //!poll: Sends message with reactions for a poll.
 
-  //!help: Prints out helpful information.
+    case "!poll":
+      poll(client, msg, userID);
+      return;
+    
+    //!echo: Echoes in provided channel.
 
-  if (msg.content === '!help' && !msg.author.bot) {
-    help(client, msg, perms, userID);
-  }
+    case "!echo":
+      echo(client, msg, perms, userID);
+      return;
 
-  //!poll: Sends message with reactions for a poll.
+    //!kick: Kicks specified user.
 
-  if (msg.content.startsWith('!poll') && !msg.author.bot) {
-    poll(client, msg, perms, userID);
+    case "!kick":
+      kick(client, msg, perms, userID);
+      return;
+
+    //!ban: Bans specified user.
+
+    case "!ban ":
+      ban(client, msg, perms, userID);
+      return;
+
+    //Default case
+
+    default:
+      break;
   }
 
   //!rolelist: Lists members with given role.
@@ -186,11 +223,6 @@ client.on('message', msg => {
   if (msg.content.startsWith('!rolelist') && !msg.author.bot) {
     rolelist(client, msg, perms, userID);
   }
-
-  //Boolean that determines if a member has Admin permissions.
-
-  if (msg.member)
-    var perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
 
   //!setstatus: Sets the status of the bot.
 
@@ -202,12 +234,6 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
     autoresponse(client, msg, perms, autoresponses, userID);
-  }
-
-  //!echo: Echoes in provided channel.
-
-  if (msg.content.startsWith('!echo') && !msg.author.bot) {
-    echo(client, msg, perms, userID);
   }
 
   //!purge: Bulk deletes specified number of messages.
@@ -226,18 +252,6 @@ client.on('message', msg => {
 
   if (msg.content.startsWith('!specverify') && !msg.author.bot) {
     specverify(client, msg, perms, userID);
-  }
-
-  //!kick: Kicks specified user.
-
-  if (msg.content.startsWith('!kick') && !msg.author.bot) {
-    kick(client, msg, perms, userID);
-  }
-
-  //!ban: Bans specified user.
-
-  if (msg.content.startsWith('!ban') && !msg.author.bot) {
-    ban(client, msg, perms, userID);
   }
 
   //Autoresponses

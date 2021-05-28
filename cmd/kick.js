@@ -48,8 +48,8 @@ function func(client, msg, perms, userID) {
   }
   else
     msg.reply("You didn't mention the user to kick!");
+    
   return;
-
 }
 
 module.exports = func;
