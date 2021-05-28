@@ -12,18 +12,18 @@ This bot serves to moderate and provide moderators with many useful tools in the
 
 1. Create a file in the same directory of `index.js` called `init.txt`
 2. The `init.txt` file should look exactly as follows (ignore any square brackets):
-  ```
-  USER FOR LOGGING: [ID of user to direct message logs to]
-  TOKEN: [Bot token]
+    ```
+    USER FOR LOGGING: [ID of user to direct message logs to]
+    TOKEN: [Bot token]
 
-  AUTOROLES
-  [User ID 1]/[Name of User 1]
-  [User ID 2]/[Name of User 2]
+    AUTOROLES
+    [User ID 1]/[Name of User 1]
+    [User ID 2]/[Name of User 2]
 
-  AUTORESPONSES
-  [Prompt 1]/[Response 1]
-  [Prompt 2]/[Response 2]
-  ```
+    AUTORESPONSES
+    [Prompt 1]/[Response 1]
+    [Prompt 2]/[Response 2]
+    ```
 3. Create a file in the same directory of `index.js` called `status.txt`. The `status.txt` file will just contain the desired status of the bot.
 
 ### Commands

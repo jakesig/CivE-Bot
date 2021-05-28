@@ -19,14 +19,6 @@ function log(client) {
   //Member Left
 
   client.on('guildMemberRemove', member => {
-
-    //Update member count
-    
-    const guild = client.guilds.cache.get("810647926107275294");
-    const memberCountChannel = client.channels.cache.get("844736967635238932");
-    const memberCount = guild.memberCount-2;
-    memberCountChannel.setName("Member Count: " + memberCount);
-
     const embed = new Discord.MessageEmbed()
         .setColor('#ff0000')
         .setTitle('Member left')
@@ -134,8 +126,6 @@ function log(client) {
       embed.setDescription("**From: **🔈"+oldstate.channel.name+"\n**To: **🔈"+newstate.channel.name);
       oldstate.guild.channels.cache.find(i => i.name === "action-log").send(embed);
     }
-
-    
   });
 
   //Member Banned

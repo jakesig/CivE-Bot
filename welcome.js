@@ -7,13 +7,6 @@ function func(client, member, roles) {
   if (member.bot)
     return;
 
-  //Update member count
-  
-  const guild = client.guilds.cache.get("810647926107275294");
-  const memberCountChannel = client.channels.cache.get("844736967635238932");
-  const memberCount = guild.memberCount-2;
-  memberCountChannel.setName("Member Count: " + memberCount);
-
   //Roles  
 
   const pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");

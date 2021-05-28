@@ -9,6 +9,8 @@ const log = require('./log.js');
 const cmd = require ('./cmd/cmd.js');
 const welcome = require('./welcome.js');
 const keepAlive = require('./server.js');
+const membercount = require('./membercount.js');
+const onlinecount = require('./onlinecount.js');
 
 //Variables
 
@@ -17,7 +19,6 @@ let autoresponses = new Map();
 let roles = new Map();
 let userID = '';
 let status = '';
-let token = '';
 let online = 0;
 let perms = false;
 
@@ -33,10 +34,10 @@ fs.readFile('init.txt', 'utf8', function(err, data) {
   if (err) throw err;
   const lines = data.split("\n");
 
-  //Determines user for logging and token, then logs in the bot
+  //Determines user for logging and determines token, then logs in the bot
 
   userID += lines[0].split(': ')[1];
-  token += lines[1].split(': ')[1];
+  const token = lines[1].split(': ')[1];
   client.login(token);
 
   //Reads any autorole and autoresponse information needed
@@ -79,33 +80,19 @@ client.on('ready', () => {
   client.user.setActivity(status);
   client.users.cache.get(userID).send("The bot is alive!");
 
-  //Keeps track of member count and members online.
+  //Keeps track of member count in each guild
 
-  const guild = client.guilds.cache.get("810647926107275294");
-  const memberCountChannel = client.channels.cache.get("844736967635238932");
-  let memberCount = guild.memberCount-2;
-  memberCountChannel.setName("Member Count: " + memberCount);
+  membercount(client);
 
-  const onlineCountChannel = client.channels.cache.get("844827563045552128");
-  let onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
-  onlineCountChannel.setName("Members Online: " + onlineCount);
+  //Keeps track of members online in each guild
 
+  onlinecount(client);
 });
 
 //Updates online members when a presence updates.
 
 client.on('presenceUpdate', (oldPr, newPr) => {
-  if (newPr.member.user.bot)
-    return;
-
-  const guild = client.guilds.cache.get("810647926107275294");
-  const onlineCountChannel = client.channels.cache.get("844827563045552128");
-  let onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
-
-  if ((online != onlineCount) && (oldPr) && oldPr.status != newPr.status && (oldPr.status == "offline" || newPr.status == "offline")) {
-    onlineCountChannel.setName("Members Online: " + onlineCount);
-    online = onlineCount;
-  }
+  onlinecount(client, oldPr, newPr, online);
 });
 
 //Check if rate limit
@@ -118,7 +105,14 @@ client.on('rateLimit', (info) => {
 
 client.on('guildMemberAdd', member => {
   welcome(client, member, roles);
+  membercount(client, member.guild);
 });
+
+//On member remove
+
+client.on('guildMemberRemove', member => {
+  membercount(client, member.guild);
+})
 
 //Message handler
 
