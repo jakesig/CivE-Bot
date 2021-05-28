@@ -7,6 +7,12 @@ function func(client, msg, perms, userID) {
   if (!perms)
     return;
 
+  //Variables
+
+  const user = msg.mentions.users.first();
+  const pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+  const spec = msg.member.guild.roles.cache.find(role => role.name === "Spectator");
+
   //Logging
 
   const msgembed = new Discord.MessageEmbed()
@@ -22,11 +28,7 @@ function func(client, msg, perms, userID) {
 
   msg.channel.bulkDelete(1);
 
-  //Variables
 
-  const user = msg.mentions.users.first();
-  const pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-  const spec = msg.member.guild.roles.cache.find(role => role.name === "Spectator");
   
   //Embed construction
 
