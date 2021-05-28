@@ -25,6 +25,8 @@ This bot serves to moderate and provide moderators with many useful tools in the
     [Prompt 2]/[Response 2]
     ```
 3. Create a file in the same directory of `index.js` called `status.txt`. The `status.txt` file will just contain the desired status of the bot.
+4. Ensure that there is a channel named "Member Count" and a channel named "Members Online" for member tracking.
+5. Ensure that there is a text channel named "action-log" for the action log.
 
 ### Commands
 

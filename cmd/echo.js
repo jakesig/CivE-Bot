@@ -1,3 +1,9 @@
+/* echo.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that echoes into a channel specified.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {

@@ -1,3 +1,9 @@
+/* purge.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that purges amount of messages specified.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {

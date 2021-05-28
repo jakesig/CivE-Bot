@@ -1,3 +1,9 @@
+/* verify.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that assigns a member the Civil Engineer role.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {

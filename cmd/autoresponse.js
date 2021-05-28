@@ -1,3 +1,9 @@
+/* autoresponse.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that adds an autoresponse.
+*/
+
 const Discord = require('discord.js');
 const fs = require('fs');
 
@@ -24,9 +30,14 @@ function func(client, msg, perms, autoresponses, userID) {
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
   client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
 
-  //Delete invocation
+  //Delete invocation and check if arguments are provided.
 
   msg.channel.bulkDelete(1);
+
+  if (!args[1]) {
+    msg.reply("No arguments provided!");
+    return;
+  }
 
   //Embed construction
 
@@ -46,14 +57,14 @@ function func(client, msg, perms, autoresponses, userID) {
     embed.setDescription('**Prompt: **' + args[1] + "\n**Response: **" + key[1]);
     msg.channel.send(embed);
     client.users.cache.get(userID).send(embed);
-    fs.appendFile('auto.txt', write, 'utf8', (err) => {
+    fs.appendFile('init.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });
     autoresponses.set(args[1], key[1]);
     return;
   }
 
-  fs.appendFile('auto.txt', write, 'utf8', (err) => {
+  fs.appendFile('init.txt', write, 'utf8', (err) => {
     if (err) throw err;
   });
 

@@ -1,3 +1,9 @@
+/* ping.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that pings the bot.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, userID) {

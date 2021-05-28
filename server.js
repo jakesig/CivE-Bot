@@ -1,3 +1,9 @@
+/* server.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that keeps the bot alive.
+*/
+
 const express = require('express');
 const server = express();
 

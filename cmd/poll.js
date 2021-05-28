@@ -1,3 +1,9 @@
+/* poll.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that sends a poll.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, userID) {

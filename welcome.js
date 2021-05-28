@@ -1,3 +1,9 @@
+/* membercount.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that processes a new user added.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, member, roles) {

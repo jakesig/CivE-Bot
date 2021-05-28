@@ -1,3 +1,9 @@
+/* index.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains the primary code for initializing and operating the bot.
+*/
+
 //Library Imports
 
 const Discord = require('discord.js');
@@ -26,7 +32,6 @@ let perms = false;
 
 keepAlive();
 log(client);
-
 
 //Reads initialization information
 
@@ -91,15 +96,11 @@ client.on('ready', () => {
 
 //Updates online members when a presence updates.
 
-client.on('presenceUpdate', (oldPr, newPr) => {
-  onlinecount(client, oldPr, newPr, online);
-});
+client.on('presenceUpdate', (oldPr, newPr) => {onlinecount(client, oldPr, newPr, online);});
 
 //Check if rate limit
 
-client.on('rateLimit', (info) => {
-  console.log(info.timeout);
-});
+client.on('rateLimit', (info) => {console.log(info.timeout);});
 
 //On member add
 
@@ -110,9 +111,7 @@ client.on('guildMemberAdd', member => {
 
 //On member remove
 
-client.on('guildMemberRemove', member => {
-  membercount(client, member.guild);
-})
+client.on('guildMemberRemove', member => {membercount(client, member.guild);})
 
 //Message handler
 

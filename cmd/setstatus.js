@@ -1,3 +1,9 @@
+/* setstatus.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that sets the status of the bot.
+*/
+
 const Discord = require('discord.js');
 var fs = require('fs');
 

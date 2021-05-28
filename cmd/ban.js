@@ -1,3 +1,9 @@
+/* ban.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that bans a user.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {

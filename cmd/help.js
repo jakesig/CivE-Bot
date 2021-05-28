@@ -1,3 +1,9 @@
+/* help.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that sends the help menu.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, userID) {

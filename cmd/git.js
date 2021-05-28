@@ -1,3 +1,9 @@
+/* git.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function displays GitHub information.
+*/
+
 const Discord = require('discord.js');
 const git = require('git-last-commit');
 

@@ -1,3 +1,9 @@
+/* rolelist.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a function that sends a list of members with specified role.
+*/
+
 const Discord = require('discord.js');
 
 function func(client, msg, perms, userID) {

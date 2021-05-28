@@ -1,4 +1,8 @@
-//Action logging
+/* log.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains a code that keeps track of actions in a guild.
+*/
 
 const Discord = require('discord.js');
 
