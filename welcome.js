@@ -10,17 +10,17 @@ function func(client, member, roles) {
   //Update member count
   
   const guild = client.guilds.cache.get("810647926107275294");
-  var memberCountChannel = client.channels.cache.get("844736967635238932");
-  var memberCount = guild.memberCount-2;
+  const memberCountChannel = client.channels.cache.get("844736967635238932");
+  const memberCount = guild.memberCount-2;
   memberCountChannel.setName("Member Count: " + memberCount);
 
   //Roles  
 
-  var pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-  var civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
-  var spec = member.guild.roles.cache.find(role => role.name === "Spectator");
-  var ben = member.guild.roles.cache.find(role => role.name === "not ben");
-  var mod = member.guild.roles.cache.find(role => role.name === "Moderator");
+  const pend = member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+  const civ = member.guild.roles.cache.find(role => role.name === "Civil Engineer");
+  const spec = member.guild.roles.cache.find(role => role.name === "Spectator");
+  const ben = member.guild.roles.cache.find(role => role.name === "not ben");
+  const mod = member.guild.roles.cache.find(role => role.name === "Moderator");
 
   //Ben
 
@@ -58,7 +58,6 @@ function func(client, member, roles) {
     .setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
-      
 }
 
 module.exports = func;

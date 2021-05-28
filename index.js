@@ -160,7 +160,7 @@ client.on('message', msg => {
 
   //Commands
 
-  switch (msg.content) {
+  switch (msg.content.split(" ")[0]) {
 
     //!git: Returns git repository information.
 
@@ -180,14 +180,6 @@ client.on('message', msg => {
       ping(client, msg, userID);
       return;
     
-    //Default case
-
-    default:
-      break;
-  }
-
-  switch (msg.content.substr(0,5)) {
-
     //!poll: Sends message with reactions for a poll.
 
     case "!poll":
@@ -208,50 +200,50 @@ client.on('message', msg => {
 
     //!ban: Bans specified user.
 
-    case "!ban ":
+    case "!ban":
       ban(client, msg, perms, userID);
+      return;
+
+    //!rolelist: Lists members with given role.
+
+    case "!rolelist":
+      rolelist(client, msg, perms, userID);
+      return;
+
+    //!setstatus: Sets the status of the bot.
+
+    case "!setstatus":
+      setstatus(client, msg, perms, userID);
+      return;
+
+    //!autoresponse: Adds autoresponse to bot.
+
+    case "!autoresponse":
+      autoresponse(client, msg, perms, autoresponses, userID);
+      return;
+
+    //!purge: Bulk deletes specified number of messages.
+
+    case "!purge":
+      purge(client, msg, perms, userID);
+      return;
+
+    //!verify: Verifies user, giving them the Civil Engineer Role.
+
+    case "!verify":
+      verify(client, msg, perms, userID);
+      return;
+
+    //!specverify: Verifies user, giving them the Spectator Role.
+
+    case "!specverify":
+      specverify(client, msg, perms, userID);
       return;
 
     //Default case
 
     default:
       break;
-  }
-
-  //!rolelist: Lists members with given role.
-
-  if (msg.content.startsWith('!rolelist') && !msg.author.bot) {
-    rolelist(client, msg, perms, userID);
-  }
-
-  //!setstatus: Sets the status of the bot.
-
-  if (msg.content.startsWith('!setstatus') && !msg.author.bot) {
-    setstatus(client, msg, perms, userID);
-  }
-
-  //!autoresponse: Adds autoresponse to bot.
-
-  if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
-    autoresponse(client, msg, perms, autoresponses, userID);
-  }
-
-  //!purge: Bulk deletes specified number of messages.
-
-  if (msg.content.startsWith('!purge')) {
-    purge(client, msg, perms, userID);
-  }
-
-  //!verify: Verifies user, giving them the Civil Engineer Role.
-
-  if (msg.content.startsWith('!verify') && !msg.author.bot) {
-    verify(client, msg, perms, userID);
-  }
-
-  //!specverify: Verifies user, giving them the Spectator Role.
-
-  if (msg.content.startsWith('!specverify') && !msg.author.bot) {
-    specverify(client, msg, perms, userID);
   }
 
   //Autoresponses
