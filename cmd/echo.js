@@ -21,7 +21,6 @@ function func(client, msg, perms, userID) {
   //Delete invocation and determine channel to echo in
 
   msg.channel.bulkDelete(1);
-
   const args = msg.content.substring(1).split(" ");
   let write = new String(args[2]);
 

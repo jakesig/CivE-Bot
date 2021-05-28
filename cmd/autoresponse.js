@@ -8,6 +8,11 @@ function func(client, msg, perms, autoresponses, userID) {
   if (!perms)
     return;
 
+  //Variables
+
+  const args = msg.content.substring(1).split(" ");
+  const write = new String("\n" + args[1] + "/" + args[2]);
+
   //Logging
 
   const msgembed = new Discord.MessageEmbed()
@@ -22,11 +27,6 @@ function func(client, msg, perms, autoresponses, userID) {
   //Delete invocation
 
   msg.channel.bulkDelete(1);
-
-  //Variables
-
-  const args = msg.content.substring(1).split(" ");
-  let write = new String("\n" + args[1] + "/" + args[2]);
 
   //Embed construction
 

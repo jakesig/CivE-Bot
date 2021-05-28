@@ -5,60 +5,65 @@ const fs = require('fs');
 
 //Local Imports
 
-const keepAlive = require('./server.js');
 const log = require('./log.js');
+const cmd = require ('./cmd/cmd.js');
 const welcome = require('./welcome.js');
-
-//Command Imports
-
-const echo = require('./cmd/echo.js');
-const autoresponse = require('./cmd/autoresponse.js');
-const help = require('./cmd/help.js');
-const ban = require('./cmd/ban.js');
-const git = require('./cmd/git.js');
-const kick = require('./cmd/kick.js');
-const purge = require('./cmd/purge.js');
-const verify = require('./cmd/verify.js');
-const rolelist = require('./cmd/rolelist.js');
-const specverify = require('./cmd/specverify.js');
-const setstatus = require('./cmd/setstatus.js');
-const poll = require('./cmd/poll.js');
-const ping = require('./cmd/ping.js');
+const keepAlive = require('./server.js');
 
 //Variables
 
 const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
-let userID = "371052099850469377";
-let online = 0;
+let userID = '';
 let status = '';
 let token = '';
+let online = 0;
+let perms = false;
 
 //Functions
 
 keepAlive();
 log(client);
 
-//Reads the autoresponses in the file auto.txt.
 
-fs.readFile('auto.txt', 'utf8', function(err, data) {
+//Reads initialization information
+
+fs.readFile('init.txt', 'utf8', function(err, data) {
   if (err) throw err;
-  const responses = data.split("\n");
-  for (i = 0; i < responses.length; i++) {
-    const args = responses[i].split("/");
-    autoresponses.set(args[0], args[1]);
-  }
-});
+  const lines = data.split("\n");
 
-//Read users for Rolepersist
+  //Determines user for logging and token, then logs in the bot
 
-fs.readFile('roles.txt', 'utf8', function(err, data) {
-  if (err) throw err;
-  const responses = data.split("\n");
-  for (i = 0; i < responses.length; i++) {
-    const args = responses[i].split("/");
-    roles.set(args[0], args[1]);
+  userID += lines[0].split(': ')[1];
+  token += lines[1].split(': ')[1];
+  client.login(token);
+
+  //Reads any autorole and autoresponse information needed
+  
+  let section = "AUTOROLES";
+  for (i = 4; i < lines.length; i++) {
+    let args = lines[i].split("/");
+
+    //Confirms the section of the file being read
+
+    if (args[0] == "") {
+      section = "AUTORESPONSES";
+      i += 2;
+      args = lines[i].split("/");
+    }
+
+    //If reading autoroles, add to roles map
+
+    if (section == "AUTOROLES") {
+      roles.set(args[0], args[1]);
+    }
+
+    //If reading autoresponses, add to autoresponses map
+
+    else if (section == "AUTORESPONSES") {
+      autoresponses.set(args[0], args[1]);
+    }
   }
 });
 
@@ -67,14 +72,6 @@ fs.readFile('roles.txt', 'utf8', function(err, data) {
 fs.readFile('status.txt', 'utf8', function(err, data) {
   if (err) throw err;
   status += data;
-});
-
-//Reads token from file and logs in the bot
-
-fs.readFile('token.txt', 'utf8', function(err, data) {
-  if (err) throw err;
-  token += data;
-  client.login(token);
 });
 
 client.on('ready', () => {
@@ -144,7 +141,7 @@ client.on('message', msg => {
   //Boolean that determines if a member has Admin permissions.
 
   if (msg.member) {
-    var perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
+    perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
   }
 
   //Moderation
@@ -158,93 +155,9 @@ client.on('message', msg => {
     return;
   }
 
-  //Commands
+  //Command Processing
 
-  switch (msg.content.split(" ")[0]) {
-
-    //!git: Returns git repository information.
-
-    case "!git":
-      git(client, msg, userID);
-      return;
-
-    //!help: Prints out helpful information.
-
-    case "!help":
-      help(client, msg, userID);
-      return;
-
-    //!ping: Pings the bot.
-
-    case "!ping":
-      ping(client, msg, userID);
-      return;
-    
-    //!poll: Sends message with reactions for a poll.
-
-    case "!poll":
-      poll(client, msg, userID);
-      return;
-    
-    //!echo: Echoes in provided channel.
-
-    case "!echo":
-      echo(client, msg, perms, userID);
-      return;
-
-    //!kick: Kicks specified user.
-
-    case "!kick":
-      kick(client, msg, perms, userID);
-      return;
-
-    //!ban: Bans specified user.
-
-    case "!ban":
-      ban(client, msg, perms, userID);
-      return;
-
-    //!rolelist: Lists members with given role.
-
-    case "!rolelist":
-      rolelist(client, msg, perms, userID);
-      return;
-
-    //!setstatus: Sets the status of the bot.
-
-    case "!setstatus":
-      setstatus(client, msg, perms, userID);
-      return;
-
-    //!autoresponse: Adds autoresponse to bot.
-
-    case "!autoresponse":
-      autoresponse(client, msg, perms, autoresponses, userID);
-      return;
-
-    //!purge: Bulk deletes specified number of messages.
-
-    case "!purge":
-      purge(client, msg, perms, userID);
-      return;
-
-    //!verify: Verifies user, giving them the Civil Engineer Role.
-
-    case "!verify":
-      verify(client, msg, perms, userID);
-      return;
-
-    //!specverify: Verifies user, giving them the Spectator Role.
-
-    case "!specverify":
-      specverify(client, msg, perms, userID);
-      return;
-
-    //Default case
-
-    default:
-      break;
-  }
+  cmd(client, msg, perms, autoresponses, userID);
 
   //Autoresponses
 
