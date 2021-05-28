@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Checking for permissions
 

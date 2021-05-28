@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 const fs = require('fs');
 
-function func(client, msg, perms, autoresponses) {
+function func(client, msg, perms, autoresponses, userID) {
   
   //Checking for permissions
 
@@ -26,7 +25,7 @@ function func(client, msg, perms, autoresponses) {
 
   //Variables
 
-  var args = msg.content.substring(1).split(" ");
+  const args = msg.content.substring(1).split(" ");
   let write = new String("\n" + args[1] + "/" + args[2]);
 
   //Embed construction
@@ -43,7 +42,7 @@ function func(client, msg, perms, autoresponses) {
     for (i = 3; i < args.length; i++) {
       write += " " + args[i];
     }
-    var key = write.split("/");
+    const key = write.split("/");
     embed.setDescription('**Prompt: **' + args[1] + "\n**Response: **" + key[1]);
     msg.channel.send(embed);
     client.users.cache.get(userID).send(embed);

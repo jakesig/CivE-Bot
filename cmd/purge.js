@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -21,8 +20,8 @@ function func(client, msg, perms) {
 
   //Determine amount of messages to remove and remove them
 
-  var args = msg.content.substring(1).split(" ");
-  let messagecount = parseInt(args[1]) + 1;
+  const args = msg.content.substring(1).split(" ");
+  const messagecount = parseInt(args[1]) + 1;
 
   msg.channel.bulkDelete(messagecount).catch(err => {
     msg.channel.send(`Error in purging, try again in a bit.`);

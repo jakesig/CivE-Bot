@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
 function func(client, member, roles) {
   

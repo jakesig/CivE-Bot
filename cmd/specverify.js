@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -26,8 +25,8 @@ function func(client, msg, perms) {
   //Variables
 
   const user = msg.mentions.users.first();
-  var pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
-  var spec = msg.member.guild.roles.cache.find(role => role.name === "Spectator");
+  const pend = msg.member.guild.roles.cache.find(role => role.name === "Pending Mod Review");
+  const spec = msg.member.guild.roles.cache.find(role => role.name === "Spectator");
   
   //Embed construction
 

@@ -30,9 +30,9 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = "371052099850469377";
-var online = 0;
-var status;
-var token='';
+let online = 0;
+let status = '';
+let token = '';
 
 //Functions
 
@@ -43,9 +43,9 @@ log(client);
 
 fs.readFile('auto.txt', 'utf8', function(err, data) {
   if (err) throw err;
-  var responses = data.split("\n");
+  const responses = data.split("\n");
   for (i = 0; i < responses.length; i++) {
-    var args = responses[i].split("/");
+    const args = responses[i].split("/");
     autoresponses.set(args[0], args[1]);
   }
 });
@@ -54,9 +54,9 @@ fs.readFile('auto.txt', 'utf8', function(err, data) {
 
 fs.readFile('roles.txt', 'utf8', function(err, data) {
   if (err) throw err;
-  var responses = data.split("\n");
+  const responses = data.split("\n");
   for (i = 0; i < responses.length; i++) {
-    var args = responses[i].split("/");
+    const args = responses[i].split("/");
     roles.set(args[0], args[1]);
   }
 });
@@ -65,7 +65,7 @@ fs.readFile('roles.txt', 'utf8', function(err, data) {
 
 fs.readFile('status.txt', 'utf8', function(err, data) {
   if (err) throw err;
-  status = data;
+  status += data;
 });
 
 //Reads token from file and logs in the bot
@@ -84,12 +84,12 @@ client.on('ready', () => {
   //Keeps track of member count and members online.
 
   const guild = client.guilds.cache.get("810647926107275294");
-  var memberCountChannel = client.channels.cache.get("844736967635238932");
-  var memberCount = guild.memberCount-2;
+  const memberCountChannel = client.channels.cache.get("844736967635238932");
+  let memberCount = guild.memberCount-2;
   memberCountChannel.setName("Member Count: " + memberCount);
 
-  var onlineCountChannel = client.channels.cache.get("844827563045552128");
-  var onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
+  const onlineCountChannel = client.channels.cache.get("844827563045552128");
+  let onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
   onlineCountChannel.setName("Members Online: " + onlineCount);
 
 });
@@ -101,8 +101,8 @@ client.on('presenceUpdate', (oldPr, newPr) => {
     return;
 
   const guild = client.guilds.cache.get("810647926107275294");
-  var onlineCountChannel = client.channels.cache.get("844827563045552128");
-  var onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
+  const onlineCountChannel = client.channels.cache.get("844827563045552128");
+  let onlineCount = (guild.members.cache.filter(member => member.presence.status !== "offline").size)-2;
 
   if ((online != onlineCount) && (oldPr) && oldPr.status != newPr.status && (oldPr.status == "offline" || newPr.status == "offline")) {
     onlineCountChannel.setName("Members Online: " + onlineCount);
@@ -166,25 +166,25 @@ client.on('message', msg => {
   //!git: Returns git repository information.
 
   if (msg.content=="!git" && !msg.author.bot) {
-    git(client, msg, perms);
+    git(client, msg, perms, userID);
   }
 
   //!help: Prints out helpful information.
 
   if (msg.content === '!help' && !msg.author.bot) {
-    help(client, msg, perms);
+    help(client, msg, perms, userID);
   }
 
   //!poll: Sends message with reactions for a poll.
 
   if (msg.content.startsWith('!poll') && !msg.author.bot) {
-    poll(client, msg, perms);
+    poll(client, msg, perms, userID);
   }
 
   //!rolelist: Lists members with given role.
 
   if (msg.content.startsWith('!rolelist') && !msg.author.bot) {
-    rolelist(client, msg, perms);
+    rolelist(client, msg, perms, userID);
   }
 
   //Boolean that determines if a member has Admin permissions.
@@ -195,49 +195,49 @@ client.on('message', msg => {
   //!setstatus: Sets the status of the bot.
 
   if (msg.content.startsWith('!setstatus') && !msg.author.bot) {
-    setstatus(client, msg, perms);
+    setstatus(client, msg, perms, userID);
   }
 
   //!autoresponse: Adds autoresponse to bot.
 
   if (msg.content.startsWith('!autoresponse') && !msg.author.bot) {
-    autoresponse(client, msg, perms, autoresponses);
+    autoresponse(client, msg, perms, autoresponses, userID);
   }
 
   //!echo: Echoes in provided channel.
 
   if (msg.content.startsWith('!echo') && !msg.author.bot) {
-    echo(client, msg, perms);
+    echo(client, msg, perms, userID);
   }
 
   //!purge: Bulk deletes specified number of messages.
 
   if (msg.content.startsWith('!purge')) {
-    purge(client, msg, perms);
+    purge(client, msg, perms, userID);
   }
 
   //!verify: Verifies user, giving them the Civil Engineer Role.
 
   if (msg.content.startsWith('!verify') && !msg.author.bot) {
-    verify(client, msg, perms);
+    verify(client, msg, perms, userID);
   }
 
   //!specverify: Verifies user, giving them the Spectator Role.
 
   if (msg.content.startsWith('!specverify') && !msg.author.bot) {
-    specverify(client, msg, perms);
+    specverify(client, msg, perms, userID);
   }
 
   //!kick: Kicks specified user.
 
   if (msg.content.startsWith('!kick') && !msg.author.bot) {
-    kick(client, msg, perms);
+    kick(client, msg, perms, userID);
   }
 
   //!ban: Bans specified user.
 
   if (msg.content.startsWith('!ban') && !msg.author.bot) {
-    ban(client, msg, perms);
+    ban(client, msg, perms, userID);
   }
 
   //Autoresponses

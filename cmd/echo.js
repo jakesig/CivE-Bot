@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -23,7 +22,7 @@ function func(client, msg, perms) {
 
   msg.channel.bulkDelete(1);
 
-  var args = msg.content.substring(1).split(" ");
+  const args = msg.content.substring(1).split(" ");
   let write = new String(args[2]);
 
   if (!msg.guild.channels.cache.find(i => i.name === args[1])) {

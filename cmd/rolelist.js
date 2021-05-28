@@ -1,12 +1,11 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Variables
 
-  var rolename = msg.content.substring(10);
-  var role = msg.guild.roles.cache.find(role => role.name === rolename);
+  const rolename = msg.content.substring(10);
+  const role = msg.guild.roles.cache.find(role => role.name === rolename);
 
   //Logging
 

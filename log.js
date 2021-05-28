@@ -23,8 +23,8 @@ function log(client) {
     //Update member count
     
     const guild = client.guilds.cache.get("810647926107275294");
-    var memberCountChannel = client.channels.cache.get("844736967635238932");
-    var memberCount = guild.memberCount-2;
+    const memberCountChannel = client.channels.cache.get("844736967635238932");
+    const memberCount = guild.memberCount-2;
     memberCountChannel.setName("Member Count: " + memberCount);
 
     const embed = new Discord.MessageEmbed()

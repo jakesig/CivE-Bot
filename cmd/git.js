@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 const git = require('git-last-commit');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Logging
 

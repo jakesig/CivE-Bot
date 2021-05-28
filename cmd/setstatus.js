@@ -1,8 +1,7 @@
 const Discord = require('discord.js');
 var fs = require('fs');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -23,7 +22,7 @@ function func(client, msg, perms) {
   //Delete invocation, determine status to set
 
   msg.channel.bulkDelete(1);
-  var userstatus = msg.content.substring(11);
+  const userstatus = msg.content.substring(11);
   
   //Embed construction
 

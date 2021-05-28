@@ -1,13 +1,12 @@
 const Discord = require('discord.js');
-let userID = "371052099850469377";
 
-function func(client, msg, perms) {
+function func(client, msg, perms, userID) {
 
   //Variables
 
-  var args = msg.content.substring(6).split("\"");
-  var nums = ["0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
-  var responses="";
+  const args = msg.content.substring(6).split("\"");
+  const nums = ["0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
+  let responses="";
 
   //Logging
 
@@ -19,6 +18,10 @@ function func(client, msg, perms) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
   client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+
+  //Delete invocation
+
+  msg.channel.bulkDelete(1);
 
   //Ridding the argument array of any spaces or empty characters
 
