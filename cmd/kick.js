@@ -23,7 +23,9 @@ function func(client, msg, perms, userID) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
-  client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+  if (userID) {
+    client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
+  }
 
   //Delete invocation and determine user to kick
 

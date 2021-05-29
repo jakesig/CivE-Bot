@@ -1,13 +1,12 @@
 /* index.js
 ** CivE Bot
 ** Author: Jake Sigman
-** This file contains the primary code for initializing and operating the bot.
+** This file contains the primary code for operating the bot.
 */
 
 //Library Imports
 
 const Discord = require('discord.js');
-const fs = require('fs');
 
 //Local Imports
 
@@ -17,6 +16,7 @@ const welcome = require('./welcome.js');
 const keepAlive = require('./server.js');
 const membercount = require('./membercount.js');
 const onlinecount = require('./onlinecount.js');
+const init = require('./init.js');
 
 //Variables
 
@@ -35,55 +35,17 @@ log(client);
 
 //Reads initialization information
 
-fs.readFile('init.txt', 'utf8', function(err, data) {
-  if (err) throw err;
-  const lines = data.split("\n");
+init(client, status, autoresponses, roles, userID);
 
-  //Determines user for logging and determines token, then logs in the bot
-
-  userID += lines[0].split(': ')[1];
-  const token = lines[1].split(': ')[1];
-  client.login(token);
-
-  //Reads any autorole and autoresponse information needed
-  
-  let section = "AUTOROLES";
-  for (i = 4; i < lines.length; i++) {
-    let args = lines[i].split("/");
-
-    //Confirms the section of the file being read
-
-    if (args[0] == "") {
-      section = "AUTORESPONSES";
-      i += 2;
-      args = lines[i].split("/");
-    }
-
-    //If reading autoroles, add to roles map
-
-    if (section == "AUTOROLES") {
-      roles.set(args[0], args[1]);
-    }
-
-    //If reading autoresponses, add to autoresponses map
-
-    else if (section == "AUTORESPONSES") {
-      autoresponses.set(args[0], args[1]);
-    }
-  }
-});
-
-//Reads status from file
-
-fs.readFile('status.txt', 'utf8', function(err, data) {
-  if (err) throw err;
-  status += data;
-});
+//On ready
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity(status);
-  client.users.cache.get(userID).send("The bot is alive!");
+
+  if (userID) {
+    client.users.cache.get(userID).send("The bot is alive!");
+  }
 
   //Keeps track of member count in each guild
 

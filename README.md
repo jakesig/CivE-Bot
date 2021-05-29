@@ -12,6 +12,7 @@ This bot serves to moderate and provide moderators with many useful tools in the
 
 1. Create a file in the same directory of `index.js` called `init.txt`
 2. The `init.txt` file should look exactly as follows (ignore any square brackets):
+
     ```
     USER FOR LOGGING: [ID of user to direct message logs to]
     TOKEN: [Bot token]
@@ -26,7 +27,7 @@ This bot serves to moderate and provide moderators with many useful tools in the
     ```
 3. Create a file in the same directory of `index.js` called `status.txt`. The `status.txt` file will just contain the desired status of the bot.
 4. Ensure that there is a channel named "Member Count" and a channel named "Members Online" for member tracking.
-5. Ensure that there is a text channel named "action-log" for the action log.
+5. Ensure that there is a text channel named "action-log" for the action log, and a channel named "welcome" for welcome messages.
 
 ### Commands
 

@@ -1,4 +1,4 @@
-/* membercount.js
+/* welcome.js
 ** CivE Bot
 ** Author: Jake Sigman
 ** This file contains a function that processes a new user added.
