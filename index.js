@@ -24,7 +24,6 @@ const client = new Discord.Client();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = '';
-let status = '';
 let online = 0;
 let perms = false;
 
@@ -33,34 +32,15 @@ let perms = false;
 keepAlive();
 log(client);
 
-//Reads initialization information
+//Reads initialization information and contains code for initialization
 
-init(client, status, autoresponses, roles, userID);
+init(client, autoresponses, roles, userID);
 
-//On ready
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity(status);
-
-  if (userID) {
-    client.users.cache.get(userID).send("The bot is alive!");
-  }
-
-  //Keeps track of member count in each guild
-
-  membercount(client);
-
-  //Keeps track of members online in each guild
-
-  onlinecount(client);
-});
-
-//Updates online members when a presence updates.
+//Updates online members when a presence updates
 
 client.on('presenceUpdate', (oldPr, newPr) => {onlinecount(client, oldPr, newPr, online);});
 
-//Check if rate limit
+//On rate limit
 
 client.on('rateLimit', (info) => {console.log(info.timeout);});
 
