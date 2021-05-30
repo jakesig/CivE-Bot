@@ -15,9 +15,9 @@ const fs = require('fs');
 let cmd = new Discord.Collection();
 const cmd_files = fs.readdirSync('./cmd').filter(file => file != "cmd.js");
 for (const file of cmd_files) {
-  console.log(`Loading command file ${file}`);
   const cmdFile = require(`./${file}`);
   cmd.set(cmdFile.name.toLowerCase(), cmdFile);
+  console.info(`Loaded command file ${file}`);
 }
 
 function func(client, msg, perms, autoresponses, userID) {

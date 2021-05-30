@@ -1,8 +1,7 @@
 /* index.js
 ** CivE Bot
 ** Author: Jake Sigman
-** This file contains the primary code for operating the bot.
-** This file utilizes the entire config folder.
+** This file contains the primary code for operating the bot, utilizing the entire config folder.
 */
 
 //Library Imports
@@ -12,6 +11,7 @@ const fs = require('fs');
 
 //Variables
 
+console.log = function(){};
 const client = new Discord.Client();
 let config = new Discord.Collection();
 let autoresponses = new Map();
@@ -25,9 +25,9 @@ const cmd = require ('./cmd/cmd.js');
 
 const config_files = fs.readdirSync('./config').filter(file => file.endsWith('.js'));
 for (const file of config_files) {
-  console.log(`Loading config file ${file}`);
   const configFile = require(`./config/${file}`);
   config.set(configFile.name.toLowerCase(), configFile);
+  console.info(`Loaded config file ${file}`);
 }
 
 //Functions
@@ -51,7 +51,7 @@ client.on('rateLimit', (info) => {
     setTimeout(() => {
       config.get('onlinecount')(client);
     }, info.timeout);
-    console.log("Timeout expired. Channel name change attempted.");
+    console.info("Timeout expired. Channel name change attempted.");
   }
 });
 

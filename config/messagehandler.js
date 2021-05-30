@@ -17,9 +17,9 @@ function messagehandler(client, autoresponses, userID) {
     //Handles DMs
 
     if (msg.channel.type == "dm" && !msg.author.bot) {
-      console.log(msg.author.username + ": " + msg.content);
-      msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {
-        console.log("Error in sending direct message response.");
+      console.info(msg.author.username + ": " + msg.content);
+      msg.author.send("Hello! I do not accept direct messages.").catch(error => {
+        console.info("Error in sending direct message response.");
       });
       return;
     }
