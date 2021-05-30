@@ -2,6 +2,7 @@
 ** CivE Bot
 ** Author: Jake Sigman
 ** This file contains the primary code for operating the bot.
+** This file utilizes the entire config folder.
 */
 
 //Library Imports
