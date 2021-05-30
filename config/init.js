@@ -86,7 +86,6 @@ function init(client, autoresponses, roles, userID) {
     onlinecount(client);
   });
 
-  
 }
 
 module.exports = init;

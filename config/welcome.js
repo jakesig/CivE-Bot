@@ -4,14 +4,17 @@
 ** This file contains a function that processes a new user added.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function welcome(client, member, roles) {
   
   //Check if bot
 
-  if (member.bot)
+  if (member.bot) {
     return;
+  }
 
   //Roles  
 
@@ -21,29 +24,33 @@ function welcome(client, member, roles) {
   const ben = member.guild.roles.cache.find(role => role.name === "not ben");
   const mod = member.guild.roles.cache.find(role => role.name === "Moderator");
 
-  //Ben
-
-  if (roles.get(member.id) == "Ben") {
+  if (roles.get(member.id) == "Ben") { //Ben
     member.setNickname("not ben");
     member.roles.add(spec);
     member.roles.add(ben);
   }
 
-  //Ruman and Sohaib
-
-  else if (roles.get(member.id) == "Ruman" || roles.get(member.id) == "Sohaib" || roles.get(member.id) == "Eytan") {
+  else if (roles.get(member.id) == "Ruman") { //Ruman
+    member.setNickname("Ruman");
+    member.roles.add(spec);
+  } 
+  
+  else if (roles.get(member.id) == "Sohaib") { //Sohaib
+    member.setNickname("Sohaib");
     member.roles.add(spec);
   }
 
-  //Josh
+  else if (roles.get(member.id) == "Eytan") { //Eytan
+    member.setNickname("Eytan");
+    member.roles.add(spec);
+  }
 
-  else if (roles.get(member.id) == "Josh") {
+  else if (roles.get(member.id) == "Josh") { //Josh
+    member.setNickname("Josh");
     member.roles.add(civ);
   }
 
-  //Everyone else
-
-  else {
+  else { //Everyone else
     member.roles.add(pend);
     member.guild.channels.cache.find(i => i.name === "mod-chat").send("<@"+member.user.id+"> has joined. "+"<@&"+mod.id+"> please assign a role.");
   }
