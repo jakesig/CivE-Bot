@@ -12,6 +12,9 @@
   "dependencies": {
     "discord.js": "^12.5.3",
     "express": "^4.17.1",
-    "git-last-commit": "^1.0.0"
+    "ffmpeg": "0.0.4",
+    "ffmpeg-static": "^4.3.0",
+    "git-last-commit": "^1.0.0",
+    "ytdl-core": "^4.8.2"
   }
 }

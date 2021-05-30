@@ -78,7 +78,7 @@ client.on('message', msg => {
   if (msg.member) {
     perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
   }
-
+git 
   //Moderation
 
   if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")
