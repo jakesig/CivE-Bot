@@ -10,13 +10,13 @@ const Discord = require('discord.js');
 
 //Local Imports
 
-const log = require('./log.js');
+const log = require('./config/log.js');
 const cmd = require ('./cmd/cmd.js');
-const welcome = require('./welcome.js');
-const keepAlive = require('./server.js');
-const membercount = require('./membercount.js');
-const onlinecount = require('./onlinecount.js');
-const init = require('./init.js');
+const welcome = require('./config/welcome.js');
+const keepAlive = require('./config/server.js');
+const membercount = require('./config/membercount.js');
+const onlinecount = require('./config/onlinecount.js');
+const init = require('./config/init.js');
 
 //Variables
 
