@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, perms, userID) {
+function rolelist(client, msg, perms, userID) {
   
   //Variables
 
@@ -53,4 +53,4 @@ function func(client, msg, perms, userID) {
   return;
 }
 
-module.exports = func;
+module.exports = rolelist;

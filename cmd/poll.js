@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, userID) {
+function poll(client, msg, userID) {
 
   //Variables
 
@@ -69,4 +69,4 @@ function func(client, msg, userID) {
   });
 }
 
-module.exports = func;
+module.exports = poll;

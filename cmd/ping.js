@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, userID) {
+function ping(client, msg, userID) {
 
   //Logging
 
@@ -29,4 +29,4 @@ function func(client, msg, userID) {
   return;
 }
 
-module.exports = func;
+module.exports = ping;

@@ -7,7 +7,7 @@
 const Discord = require('discord.js');
 var fs = require('fs');
 
-function func(client, msg, perms, userID) {
+function setstatus(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -57,4 +57,4 @@ function func(client, msg, perms, userID) {
       
 }
 
-module.exports = func;
+module.exports = setstatus;

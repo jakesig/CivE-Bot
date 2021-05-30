@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, perms, userID) {
+function kick(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -60,4 +60,4 @@ function func(client, msg, perms, userID) {
   return;
 }
 
-module.exports = func;
+module.exports = kick;

@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, perms, userID) {
+function specverify(client, msg, perms, userID) {
   
   //Checking for permissions
 
@@ -64,4 +64,4 @@ function func(client, msg, perms, userID) {
   return;
 }
 
-module.exports = func;
+module.exports = specverify;

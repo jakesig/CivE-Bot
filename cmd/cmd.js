@@ -2,110 +2,66 @@
 ** CivE Bot
 ** Author: Jake Sigman
 ** This file contains a function for command processing.
+** This file utilizes the entire cmd folder.
 */
 
+//Library Imports
+
 const Discord = require('discord.js');
+const fs = require('fs');
 
 //Command Imports
 
-const echo = require('./echo.js');
-const autoresponse = require('./autoresponse.js');
-const help = require('./help.js');
-const ban = require('./ban.js');
-const git = require('./git.js');
-const kick = require('./kick.js');
-const purge = require('./purge.js');
-const verify = require('./verify.js');
-const rolelist = require('./rolelist.js');
-const specverify = require('./specverify.js');
-const setstatus = require('./setstatus.js');
-const poll = require('./poll.js');
-const ping = require('./ping.js');
+let cmd = new Discord.Collection();
+const cmd_files = fs.readdirSync('./cmd').filter(file => file != "cmd.js");
+for (const file of cmd_files) {
+  console.log(`Loading command file ${file}`);
+  const cmdFile = require(`./${file}`);
+  cmd.set(cmdFile.name.toLowerCase(), cmdFile);
+}
 
 function func(client, msg, perms, autoresponses, userID) {
   switch (msg.content.split(" ")[0]) {
-
-    //!git: Returns git repository information.
-
-    case "!git":
-      git(client, msg, userID);
+    case "!git": //!git: Returns git repository information.
+      cmd.get('gitinfo')(client, msg, userID);
       return;
-
-    //!help: Prints out helpful information.
-
-    case "!help":
-      help(client, msg, userID);
+    case "!help": //!help: Prints out helpful information.
+      cmd.get('help')(client, msg, userID);
       return;
-
-    //!ping: Pings the bot.
-
-    case "!ping":
-      ping(client, msg, userID);
+    case "!ping": //!ping: Pings the bot.
+      cmd.get('ping')(client, msg, userID);
       return;
-    
-    //!poll: Sends message with reactions for a poll.
-
-    case "!poll":
-      poll(client, msg, userID);
+    case "!poll": //!poll: Sends message with reactions for a poll.
+      cmd.get('poll')(client, msg, userID);
       return;
-    
-    //!echo: Echoes in provided channel.
-
-    case "!echo":
-      echo(client, msg, perms, userID);
+    case "!echo": //!echo: Echoes in provided channel.
+      cmd.get('echo')(client, msg, perms, userID);
       return;
-
-    //!kick: Kicks specified user.
-
-    case "!kick":
-      kick(client, msg, perms, userID);
+    case "!kick": //!kick: Kicks specified user.
+      cmd.get('kick')(client, msg, perms, userID);
       return;
-
-    //!ban: Bans specified user.
-
-    case "!ban":
-      ban(client, msg, perms, userID);
+    case "!ban": //!ban: Bans specified user.
+      cmd.get('ban')(client, msg, perms, userID);
       return;
-
-    //!rolelist: Lists members with given role.
-
-    case "!rolelist":
-      rolelist(client, msg, perms, userID);
+    case "!rolelist": //!rolelist: Lists members with given role.
+      cmd.get('rolelist')(client, msg, perms, userID);
       return;
-
-    //!setstatus: Sets the status of the bot.
-
-    case "!setstatus":
-      setstatus(client, msg, perms, userID);
+    case "!setstatus": //!setstatus: Sets the status of the bot.
+      cmd.get('setstatus')(client, msg, perms, userID);
       return;
-
-    //!autoresponse: Adds autoresponse to bot.
-
-    case "!autoresponse":
-      autoresponse(client, msg, perms, autoresponses, userID);
+    case "!autoresponse": //!autoresponse: Adds autoresponse to bot.
+      cmd.get('autoresponse')(client, msg, perms, autoresponses, userID);
       return;
-
-    //!purge: Bulk deletes specified number of messages.
-
-    case "!purge":
-      purge(client, msg, perms, userID);
+    case "!purge": //!purge: Bulk deletes specified number of messages.
+      cmd.get('purge')(client, msg, perms, userID);
       return;
-
-    //!verify: Verifies user, giving them the Civil Engineer Role.
-
-    case "!verify":
-      verify(client, msg, perms, userID);
+    case "!verify": //!verify: Verifies user, giving them the Civil Engineer Role.
+      cmd.get('verify')(client, msg, perms, userID);
       return;
-
-    //!specverify: Verifies user, giving them the Spectator Role.
-
-    case "!specverify":
-      specverify(client, msg, perms, userID);
+    case "!specverify": //!specverify: Verifies user, giving them the Spectator Role.
+      cmd.get('specverify')(client, msg, perms, userID);
       return;
-
-    //Default case
-
-    default:
+    default: //Default case
       break;
   }
 }

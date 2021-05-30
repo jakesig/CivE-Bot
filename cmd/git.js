@@ -7,7 +7,7 @@
 const Discord = require('discord.js');
 const git = require('git-last-commit');
 
-function func(client, msg, userID) {
+function gitinfo(client, msg, userID) {
   
   //Logging
 
@@ -50,4 +50,4 @@ function func(client, msg, userID) {
   return;
 }
 
-module.exports = func;
+module.exports = gitinfo;

@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, msg, userID) {
+function help(client, msg, userID) {
   
   //Logging
 
@@ -70,4 +70,4 @@ function func(client, msg, userID) {
   }
 }
 
-module.exports = func;
+module.exports = help;

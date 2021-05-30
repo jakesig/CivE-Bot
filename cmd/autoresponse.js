@@ -7,7 +7,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-function func(client, msg, perms, autoresponses, userID) {
+function autoresponse(client, msg, perms, autoresponses, userID) {
 
   //Checking for permissions
 
@@ -75,4 +75,4 @@ function func(client, msg, perms, autoresponses, userID) {
   autoresponses.set(args[1], args[2]);
 }
 
-module.exports = func;
+module.exports = autoresponse;
