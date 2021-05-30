@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, member, roles) {
+function welcome(client, member, roles) {
   
   //Check if bot
 
@@ -59,4 +59,4 @@ function func(client, member, roles) {
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);
 }
 
-module.exports = func;
+module.exports = welcome;

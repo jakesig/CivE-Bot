@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, specifiedGuild = null) {
+function membercount(client, specifiedGuild = null) {
 
   //If a guild is specified, only update member count for that guild
 
@@ -26,4 +26,4 @@ function func(client, specifiedGuild = null) {
   });
 }
 
-module.exports = func;
+module.exports = membercount;

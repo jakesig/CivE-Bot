@@ -8,7 +8,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 
 function func(client, msg, perms, autoresponses, userID) {
-  
+
   //Checking for permissions
 
   if (!perms)
@@ -37,8 +37,8 @@ function func(client, msg, perms, autoresponses, userID) {
 
   msg.channel.bulkDelete(1);
 
-  if (!args[1]) {
-    msg.reply("No arguments provided!");
+  if (!args[1] || !args[2]) {
+    msg.reply("invalid arguments!");
     return;
   }
 
@@ -73,7 +73,6 @@ function func(client, msg, perms, autoresponses, userID) {
 
   msg.channel.send(embed);
   autoresponses.set(args[1], args[2]);
-  return;
 }
 
 module.exports = func;

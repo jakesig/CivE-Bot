@@ -7,102 +7,62 @@
 //Library Imports
 
 const Discord = require('discord.js');
-
-//Local Imports
-
-const log = require('./config/log.js');
-const cmd = require ('./cmd/cmd.js');
-const welcome = require('./config/welcome.js');
-const keepAlive = require('./config/server.js');
-const membercount = require('./config/membercount.js');
-const onlinecount = require('./config/onlinecount.js');
-const init = require('./config/init.js');
+const fs = require('fs');
 
 //Variables
 
 const client = new Discord.Client();
+let config = new Discord.Collection();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = '';
 let online = 0;
-let perms = false;
+
+//Local Imports
+
+const cmd = require ('./cmd/cmd.js');
+
+const config_files = fs.readdirSync('./config').filter(file => file.endsWith('.js'));
+for (const file of config_files) {
+  console.log(`Loading config file ${file}`);
+  const configFile = require(`./config/${file}`);
+  config.set(configFile.name.toLowerCase(), configFile);
+}
 
 //Functions
 
-keepAlive();
-log(client);
-
-//Reads initialization information and contains code for initialization
-
-init(client, autoresponses, roles, userID);
+config.get('keepalive')(); //Keeps bot alive
+config.get('init')(client, autoresponses, roles, userID); //Initialization code
+config.get('messagehandler')(client, autoresponses, userID); //Message handler
+config.get('log')(client); //Logging
 
 //Updates online members when a presence updates
 
-client.on('presenceUpdate', (oldPr, newPr) => {onlinecount(client, oldPr, newPr, online);});
+client.on('presenceUpdate', (oldPr, newPr) => {
+  config.get('onlinecount')(client, oldPr, newPr, online);
+});
 
 //On rate limit
 
-client.on('rateLimit', (info) => {console.log(info.timeout);});
+client.on('rateLimit', (info) => {
+  console.log("Rate Limit Alert: " + info.timeout/1000 + " s");
+  if (info.timeout > 1000) {
+    setTimeout(() => {
+      config.get('onlinecount')(client);
+    }, info.timeout);
+    contole.log("Timeout expired. Channel name change attempted.");
+  }
+});
 
 //On member add
 
 client.on('guildMemberAdd', member => {
-  welcome(client, member, roles);
-  membercount(client, member.guild);
+  config.get('welcome')(client, member, roles);
+  config.get('membercount')(client, member.guild);
 });
 
 //On member remove
 
-client.on('guildMemberRemove', member => {membercount(client, member.guild);})
-
-//Message handler
-
-client.on('message', msg => {
-
-  //Handles DMs
-
-  if (msg.channel.type == "dm" && !msg.author.bot) {
-    console.log(msg.author.username + ": " + msg.content);
-    msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => { });
-    return;
-  }
-
-  //Checks if the bot sent the message
-
-  if (msg.author.bot) {
-    return;
-  }
-
-  //Boolean that determines if a member has Admin permissions.
-
-  if (msg.member) {
-    perms = !(!msg.member.hasPermission('ADMINISTRATOR') && !msg.author.bot);
-  }
-
-  //Moderation
-
-  if (msg.content.includes("https://thumbs.gfycat.com/TartAdolescentBird-mobile.mp4")
-    || msg.content.includes("https://gfycat.com/wellgroomedoddhalibut")
-    || msg.content.includes("https://gfycat.com/wetangryflamingo")
-    || msg.content.includes("https://thumbs.gfycat.com/SlipperyBelatedKudu-size_restricted.gif")) {
-    msg.channel.bulkDelete(1);
-    msg.channel.send("Do not send that GIF in this server!");
-    return;
-  }
-
-  //Command Processing
-
-  cmd(client, msg, perms, autoresponses, userID);
-
-  //Autoresponses
-
-  if (msg.channel.name == "mod-chat"
-    || msg.channel.name == "mod-review"
-    || msg.channel.name == "announcements")
-    return;
-
-  for (let key of autoresponses.keys())
-    if (msg.content.includes(key) && !msg.author.bot && !msg.content.startsWith("!"))
-      msg.channel.send(autoresponses.get(key));
-
+client.on('guildMemberRemove', member => {
+  config.get('membercount')(client, member.guild);
 });

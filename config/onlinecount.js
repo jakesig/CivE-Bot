@@ -6,7 +6,7 @@
 
 const Discord = require('discord.js');
 
-function func(client, oldPr = null, newPr = null, online = 0) {
+function onlinecount(client, oldPr = null, newPr = null, online = 0) {
 
   //If a guild is specified, only update online count for that guild
 
@@ -47,4 +47,6 @@ function func(client, oldPr = null, newPr = null, online = 0) {
   });
 }
 
-module.exports = func;
+
+
+module.exports = onlinecount;

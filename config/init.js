@@ -14,7 +14,7 @@ const fs = require('fs');
 const membercount = require('./membercount.js');
 const onlinecount = require('./onlinecount.js');
 
-function func(client, autoresponses, roles, userID) {
+function init(client, autoresponses, roles, userID) {
 
   //Variables
 
@@ -85,6 +85,8 @@ function func(client, autoresponses, roles, userID) {
 
     onlinecount(client);
   });
+
+  
 }
 
-module.exports = func;
+module.exports = init;
