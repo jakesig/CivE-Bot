@@ -4,6 +4,8 @@
 ** This file contains a function that assigns a member the Civil Engineer role.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function verify(client, msg, perms, userID) {
@@ -57,8 +59,10 @@ function verify(client, msg, perms, userID) {
     else
       msg.reply("Can't find user.");
   }
-  else
+  else {
     msg.reply("No user mentioned.");
+  }
+  
   return;
 }
 

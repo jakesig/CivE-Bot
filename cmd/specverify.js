@@ -4,6 +4,8 @@
 ** This file contains a function that assigns member the Spectator role.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function specverify(client, msg, perms, userID) {
@@ -37,8 +39,6 @@ function specverify(client, msg, perms, userID) {
 
   msg.channel.bulkDelete(1);
 
-
-  
   //Embed construction
 
   const embed = new Discord.MessageEmbed()
@@ -59,8 +59,10 @@ function specverify(client, msg, perms, userID) {
     else
       msg.reply("Can't find user.");
   }
-  else
+  else {
     msg.reply("No user mentioned.");
+  }
+
   return;
 }
 

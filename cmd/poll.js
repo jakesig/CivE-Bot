@@ -4,6 +4,8 @@
 ** This file contains a function that sends a poll.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function poll(client, msg, userID) {
@@ -24,9 +26,8 @@ function poll(client, msg, userID) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
-  if (userID) {
+  if (userID)
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-  }
 
   //Delete invocation
 
@@ -40,15 +41,11 @@ function poll(client, msg, userID) {
 
   //Checking if too little or too many arguments
 
-  if (args.length > 11) {
-    msg.reply("too many arguments!");
-    return;
-  }
+  if (args.length > 11)
+    return msg.reply("too many arguments!");
 
-  if (args.length < 3) {
-    msg.reply("too little arguments!");
-    return;
-  }
+  if (args.length < 3)
+    return msg.reply("too little arguments!");
 
   //Embed construction
 

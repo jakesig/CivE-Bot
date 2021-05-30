@@ -4,14 +4,17 @@
 ** This file contains a function that kicks a user.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function kick(client, msg, perms, userID) {
   
   //Checking for permissions
 
-  if (!perms)
+  if (!perms) {
     return;
+  }
 
   //Logging
 
@@ -32,6 +35,8 @@ function kick(client, msg, perms, userID) {
   msg.channel.bulkDelete(1);
   const user = msg.mentions.users.first();
 
+  //Embed Construction
+
   const embed = new Discord.MessageEmbed()
     .setColor('#c28080')
     .setTitle('Kicked ' + user.username)
@@ -51,8 +56,9 @@ function kick(client, msg, perms, userID) {
           console.error(err);
         });
     }
-    else
+    else {
       msg.reply("That user isn't in this server!");
+    }
   }
   else
     msg.reply("You didn't mention the user to kick!");

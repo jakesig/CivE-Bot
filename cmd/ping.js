@@ -18,15 +18,13 @@ function ping(client, msg, userID) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
-  if (userID) {
+  if (userID)
     client.users.cache.get(userID).send("Bot was pinged!\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-  }
 
   //Replying to user who pinged
 
-  msg.reply('pong!');
-
-  return;
+  return msg.reply('pong!');
+  
 }
 
 module.exports = ping;

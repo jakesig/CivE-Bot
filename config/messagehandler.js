@@ -1,9 +1,16 @@
+/* messagehandler.js
+** CivE Bot
+** Author: Jake Sigman
+** This file contains code that handles messages.
+*/
+
+//Imports and Variables
+
 const Discord = require('discord.js');
 const cmd = require ('../cmd/cmd.js');
+let perms = false;
 
-function messagehandler(client, autoresponses, userID) {
-  
-  let perms = false;
+function messagehandler(client, autoresponses, userID) {  
   
   client.on("message", msg => {
 
@@ -11,7 +18,9 @@ function messagehandler(client, autoresponses, userID) {
 
     if (msg.channel.type == "dm" && !msg.author.bot) {
       console.log(msg.author.username + ": " + msg.content);
-      msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => { });
+      msg.author.send("Hello! I do not accept direct messages. Please contact my owner, Jake.").catch(error => {
+        console.log("Error in sending direct message response.");
+      });
       return;
     }
 

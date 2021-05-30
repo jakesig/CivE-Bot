@@ -29,18 +29,15 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
   
-  if (userID) {
+  if (userID)
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-  }
 
   //Delete invocation and check if arguments are provided.
 
   msg.channel.bulkDelete(1);
-
-  if (!args[1] || !args[2]) {
-    msg.reply("invalid arguments!");
-    return;
-  }
+  
+  if (!args[1] || !args[2])
+    return msg.reply("invalid arguments!");
 
   //Embed construction
 

@@ -12,6 +12,7 @@ function rolelist(client, msg, perms, userID) {
 
   const rolename = msg.content.substring(10);
   const role = msg.guild.roles.cache.find(role => role.name === rolename);
+  let arr = new Array();
 
   //Logging
 
@@ -27,7 +28,7 @@ function rolelist(client, msg, perms, userID) {
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
   }
 
-  //Delete invocation and confirm the role exists
+  //Delete invocation and confirms that the role exists
 
   msg.channel.bulkDelete(1);
 
@@ -38,7 +39,6 @@ function rolelist(client, msg, perms, userID) {
 
   //Gather members and send a list of them
 
-  let arr = new Array();
   role.members.forEach(user => {
     arr.push(`${user.user.username}`);
   });

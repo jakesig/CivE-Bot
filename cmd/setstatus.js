@@ -4,19 +4,26 @@
 ** This file contains a function that sets the status of the bot.
 */
 
+//Library Imports
+
 const Discord = require('discord.js');
-var fs = require('fs');
+const fs = require('fs');
 
 function setstatus(client, msg, perms, userID) {
   
   //Checking for permissions
 
-  if (!perms)
+  if (!perms) {
     return;
+  }
 
-  //Variables
+  //Determines status to be set, and checks if it's not empty
 
   const userstatus = msg.content.substring(11);
+
+  if (!userstatus) {
+    msg.reply("no status provided!");
+  }
 
   //Logging
 
@@ -36,7 +43,6 @@ function setstatus(client, msg, perms, userID) {
 
   msg.channel.bulkDelete(1);
   
-  
   //Embed construction
 
   const embed = new Discord.MessageEmbed()
@@ -50,11 +56,14 @@ function setstatus(client, msg, perms, userID) {
   //Save the status in case the bot reboots
 
   fs.writeFileSync('status.txt', userstatus, 'utf8', (err) => {
-      if (err) throw err;
+    if (err) {
+      throw err;
+    }
   });
 
   client.user.setActivity(userstatus);
-      
+  
+  return;
 }
 
 module.exports = setstatus;

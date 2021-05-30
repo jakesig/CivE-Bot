@@ -51,7 +51,7 @@ client.on('rateLimit', (info) => {
     setTimeout(() => {
       config.get('onlinecount')(client);
     }, info.timeout);
-    contole.log("Timeout expired. Channel name change attempted.");
+    console.log("Timeout expired. Channel name change attempted.");
   }
 });
 

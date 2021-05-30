@@ -4,6 +4,8 @@
 ** This file contains a function that sends the help menu.
 */
 
+//discord.js library import
+
 const Discord = require('discord.js');
 
 function help(client, msg, userID) {
@@ -18,9 +20,8 @@ function help(client, msg, userID) {
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
 
-  if (userID) {
+  if (userID)
     client.users.cache.get(userID).send("**Command Ran: **" + msg.content + "\n**User: **" + msg.author.username + "\n**Channel: **" + msg.channel.name);
-  }
   
   //Delete invocation, begin typing
 
@@ -46,7 +47,6 @@ function help(client, msg, userID) {
     !rolelist {role-name}: *Lists members with role name specified.*
     !poll "Question" "Option 1" "Option 2" etc. : *Sends out poll with reactions.*`)
     .setTimestamp();
-
   const embed = new Discord.MessageEmbed()
     .setColor('#c28080')
     .setTitle('CivE Bot List of Commands')
@@ -59,15 +59,11 @@ function help(client, msg, userID) {
 
   msg.channel.stopTyping();
 
-  if (msg.channel.name === 'mod-chat' || msg.channel.name === 'mod-log') {
-    msg.channel.send(mod_embed);
-    return;
-  }
-
-  else {
-    msg.channel.send(embed);
-    return;
-  }
+  if (msg.channel.name === 'mod-chat' || msg.channel.name === 'mod-log')
+    return msg.channel.send(mod_embed);
+  
+  else
+    return msg.channel.send(embed);
 }
 
 module.exports = help;

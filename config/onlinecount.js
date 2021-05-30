@@ -47,6 +47,4 @@ function onlinecount(client, oldPr = null, newPr = null, online = 0) {
   });
 }
 
-
-
 module.exports = onlinecount;
