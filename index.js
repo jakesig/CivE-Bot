@@ -46,7 +46,7 @@ client.on('presenceUpdate', (oldPr, newPr) => {
 //On rate limit
 
 client.on('rateLimit', (info) => {
-  console.log("Rate Limit Alert: " + info.timeout/1000 + " s");
+  console.info("Rate Limit Alert: " + info.timeout/1000 + " s");
   if (info.timeout > 1000) {
     setTimeout(() => {
       config.get('onlinecount')(client);
