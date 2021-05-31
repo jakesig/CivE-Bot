@@ -45,7 +45,7 @@ function help(client, msg, userID) {
     **!specverify \`{@member}\`:** Assigns Spectator role to member.
     **!setstatus \`{status}\`**: Sets the status of the bot.
     **!rolelist \`{role-name}\`:** Lists members with role name specified.
-    **!poll \`{Question}\` \`{Option 1}\` \`{Option 2}\`:** Sends out poll with reactions. Maximum of 10 options.`)
+    **!poll "\`{Question}\`" "\`{Option 1}\`" "\`{Option 2}\`":** Sends out poll with reactions. Maximum of 10 options.`)
     .setTimestamp();
   const embed = new Discord.MessageEmbed()
     .setColor('#c28080')
@@ -54,7 +54,7 @@ function help(client, msg, userID) {
     **!git:** Returns git repository information.
     **!ping:** Pings the bot.
     **!rolelist \`{role-name}\`:** Lists members with role name specified.
-    **!poll \`{Question}\` \`{Option 1}\` \`{Option 2}\`:** Sends out poll with reactions. Maximum of 10 options.`)
+    **!poll "\`{Question}\`" "\`{Option 1}\`" "\`{Option 2}\`":** Sends out poll with reactions. Maximum of 10 options.`)
     .setTimestamp();
 
   msg.channel.stopTyping();
