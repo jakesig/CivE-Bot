@@ -36,6 +36,7 @@ This bot serves to moderate and provide moderators with many useful tools in the
 **!git:** Returns git repository information.  
 **!rolelist `{role-name}`:** Lists members with role name specified.  
 **!poll "`{Question}`" "`{Option 1}`" "`{Option 2}`":** Sends out poll with reactions. Maximum of 10 options.   
+**!autoresponses:** Responds with a list of the autoresponses in the bot.   
 
 ### Moderator Commands
 
