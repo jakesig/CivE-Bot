@@ -61,6 +61,9 @@ function func(client, msg, perms, autoresponses, userID) {
     case "!specverify": //!specverify: Verifies user, giving them the Spectator Role.
       cmd.get('specverify')(client, msg, perms, userID);
       return;
+    case "!remove": //!remove: removes autoresponse
+      cmd.get('remove')(client, msg, perms, autoresponses, userID);
+      return;
     default: //Default case
       break;
   }

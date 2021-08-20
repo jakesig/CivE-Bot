@@ -49,6 +49,7 @@ function setstatus(client, msg, perms, userID) {
     .setColor('#c28080')
     .setTitle('Status set!')
     .setDescription("**New status: **Playing **"+userstatus+"**")
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   msg.channel.send(embed);

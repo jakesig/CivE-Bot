@@ -36,14 +36,19 @@ function init(client, autoresponses, roles, userID) {
     //Reads any autorole and autoresponse information needed
     
     for (i = 4; i < lines.length; i++) {
+
+      //Continue if line is empty
+
+      if (lines[i] == "")
+        continue;
+
       let args = lines[i].split("/");
 
       //Confirms the section of the file being read
 
-      if (args[0] == "") {
+      if (lines[i] == "AUTORESPONSES") {
         section = "AUTORESPONSES";
-        i += 2;
-        args = lines[i].split("/");
+        args = lines[++i].split("/");
       }
 
       //If reading autoroles, add to roles map

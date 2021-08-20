@@ -61,6 +61,7 @@ function welcome(client, member, roles) {
     .setColor('#c28080')
     .setTitle('Welcome ' + member.user.username + '!')
     .setDescription('Welcome to the CivE 2024 server ' + member.user.username + '! Please wait for a moderator to review your profile.')
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   member.guild.channels.cache.find(i => i.name === "welcome").send(embed);

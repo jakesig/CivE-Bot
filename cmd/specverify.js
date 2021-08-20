@@ -45,6 +45,7 @@ function specverify(client, msg, perms, userID) {
     .setColor('#c28080')
     .setTitle('Verified ' + user.username + "! (Spectator)")
     .setDescription('Spectator role assigned.')
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   //Confirming that user exists, then assigning respective roles

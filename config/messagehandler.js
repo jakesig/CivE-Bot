@@ -61,7 +61,7 @@ function messagehandler(client, autoresponses, userID) {
     }
 
     for (let key of autoresponses.keys())
-    if (msg.content.includes(key) && !msg.content.startsWith("!"))
+    if (msg.content.toLowerCase().includes(key) && !msg.content.startsWith("!"))
       msg.channel.send(autoresponses.get(key));
   });
 }

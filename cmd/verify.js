@@ -4,7 +4,6 @@
 ** This file contains a function that assigns a member the Civil Engineer role.
 */
 
-//discord.js library import
 
 const Discord = require('discord.js');
 
@@ -45,6 +44,7 @@ function verify(client, msg, perms, userID) {
     .setColor('#c28080')
     .setTitle('Verified ' + user.username + "!")
     .setDescription('Civil Engineer role assigned.')
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
  
   //Confirming that user exists, then assigning respective roles

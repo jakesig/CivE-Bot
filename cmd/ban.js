@@ -41,6 +41,7 @@ function ban(client, msg, perms, userID) {
     .setColor('#c28080')
     .setTitle('Banned ' + user.username)
     .setDescription('Banning? Even better!')
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   if (user) {

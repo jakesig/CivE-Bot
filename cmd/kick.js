@@ -4,7 +4,6 @@
 ** This file contains a function that kicks a user.
 */
 
-//discord.js library import
 
 const Discord = require('discord.js');
 
@@ -41,6 +40,7 @@ function kick(client, msg, perms, userID) {
     .setColor('#c28080')
     .setTitle('Kicked ' + user.username)
     .setDescription('I love kicking.')
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   if (user) {

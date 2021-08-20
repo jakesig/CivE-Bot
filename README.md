@@ -46,4 +46,5 @@ This bot serves to moderate and provide moderators with many useful tools in the
 **!verify `{@member}`:** Assigns Civil Engineering role to member, giving them access to the server.  
 **!setstatus `{status}`:** Sets the status of the bot.  
 **!autoresponse `{prompt}` `{response}`:** Adds autoresponse to bot with prompt and response respectively.  
+**!remove `{prompt}` :** Removes autoresponse from bot.   
 **!specverify `{@member}`:** Assigns Spectator role to member.  

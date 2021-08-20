@@ -45,8 +45,9 @@ function rolelist(client, msg, perms, userID) {
 
   const embed = new Discord.MessageEmbed()
     .setColor(role.hexColor)
-    .setTitle(`Members with role "`+rolename+`"`)
+    .setTitle(`Members with role \``+role.name+`\``)
     .setDescription(arr.join('\n'))
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
 
   msg.channel.send(embed);

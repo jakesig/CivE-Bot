@@ -25,7 +25,6 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
     .setColor('#ffff00')
     .setTitle('Autoresponse added')
     .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
-    .setImage()
     .setTimestamp();
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
@@ -46,6 +45,7 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
     .setColor('#c28080')
     .setTitle('Autoresponse added!')
     .setDescription('**Prompt: **' + args[1] + "\n**Response: **" + args[2])
+    .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
   
   //Storing in file and adding to map
@@ -57,7 +57,6 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
     const key = write.split("/");
     embed.setDescription('**Prompt: **' + args[1] + "\n**Response: **" + key[1]);
     msg.channel.send(embed);
-    //client.users.cache.get(userID).send(embed);
     fs.appendFile('init.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });
