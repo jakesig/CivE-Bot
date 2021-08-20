@@ -11,13 +11,14 @@ const fs = require('fs');
 
 //Variables
 
-console.log = function(){};
 const client = new Discord.Client();
 let config = new Discord.Collection();
 let autoresponses = new Map();
 let roles = new Map();
 let userID = '';
 let online = 0;
+
+console.log = function(){};
 
 //Local Imports
 
@@ -48,9 +49,8 @@ client.on('presenceUpdate', (oldPr, newPr) => {
 client.on('rateLimit', (info) => {
   console.info("Rate Limit Alert: " + info.timeout/1000 + " s");
   if (info.timeout > 1000) {
-    setTimeout(() => {
-      config.get('onlinecount')(client);
-    }, info.timeout);
+    setTimeout(() => {}, info.timeout);
+    config.get('onlinecount')(client);
     console.info("Timeout expired. Channel name change attempted.");
   }
 });

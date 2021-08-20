@@ -17,7 +17,7 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
   //Variables
 
   const args = msg.content.substring(1).split(" ");
-  const write = new String("\n" + args[1] + "/" + args[2]);
+  var write = new String("\n" + args[1] + "/" + args[2]);
 
   //Logging
 
@@ -25,6 +25,7 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
     .setColor('#ffff00')
     .setTitle('Autoresponse added')
     .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
+    .setImage()
     .setTimestamp();
 
   msg.guild.channels.cache.find(i => i.name === "action-log").send(msgembed);
@@ -56,7 +57,7 @@ function autoresponse(client, msg, perms, autoresponses, userID) {
     const key = write.split("/");
     embed.setDescription('**Prompt: **' + args[1] + "\n**Response: **" + key[1]);
     msg.channel.send(embed);
-    client.users.cache.get(userID).send(embed);
+    //client.users.cache.get(userID).send(embed);
     fs.appendFile('init.txt', write, 'utf8', (err) => {
       if (err) throw err;
     });

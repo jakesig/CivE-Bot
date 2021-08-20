@@ -10,8 +10,8 @@ function rolelist(client, msg, perms, userID) {
   
   //Variables
 
-  const rolename = msg.content.substring(10);
-  const role = msg.guild.roles.cache.find(role => role.name === rolename);
+  const rolename = msg.content.substring(10).toLowerCase();
+  const role = msg.guild.roles.cache.find(role => role.name.toLowerCase() === rolename);
   let arr = new Array();
 
   //Logging

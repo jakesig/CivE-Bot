@@ -44,7 +44,9 @@ function gitinfo(client, msg, userID) {
       .setTitle("GitHub Repository: jakesig/CivE-Bot")
       .setDescription("https://github.com/jakesig/CivE-Bot\n\n__**Latest Commit**__\n**Message: **"+name+"\n**Branch: **"+branch+"\n**Date: **"+s+"\n**ID: **"+commitid)
       .setThumbnail("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAi68fw3hBkE6l-vGLWYB9aRoSV5DWJ0zKJtAzpjYTMD83DwP5WU4D1N7eHx1ucPcZle8&usqp=CAU");
+
     msg.channel.send(embed);
+
   });
 
   return;
