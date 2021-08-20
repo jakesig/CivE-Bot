@@ -52,6 +52,9 @@ function func(client, msg, perms, autoresponses, userID) {
     case "!autoresponse": //!autoresponse: Adds autoresponse to bot.
       cmd.get('autoresponse')(client, msg, perms, autoresponses, userID);
       return;
+    case "!autoresponses": //!autoresponse: Adds autoresponse to bot.
+      cmd.get('autoresponses')(client, msg, perms, autoresponses, userID);
+      return;
     case "!purge": //!purge: Bulk deletes specified number of messages.
       cmd.get('purge')(client, msg, perms, userID);
       return;

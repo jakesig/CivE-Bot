@@ -24,7 +24,7 @@ function remove(client, msg, perms, autoresponses, userID) {
 
   const msgembed = new Discord.MessageEmbed()
     .setColor('#ffff00')
-    .setTitle('Autoresponse added')
+    .setTitle('Autoresponse removed')
     .setDescription("**User: **<@"+msg.author.id+"> \n**Command: **"+msg.content+"\n**Channel: **"+msg.channel.name)
     .setTimestamp();
 

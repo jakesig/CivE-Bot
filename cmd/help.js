@@ -32,7 +32,7 @@ function help(client, msg, userID) {
 
   const mod_embed = new Discord.MessageEmbed()
     .setColor('#c28080')
-    .setTitle('CivE Bot List of Commands')
+    .setTitle('CivE Bot - List of Commands')
     .setDescription(`**!help:** Opens this menu.
     **!ping:** Pings the bot.
     **!git:** Returns git repository information.
@@ -49,9 +49,10 @@ function help(client, msg, userID) {
     **!poll "\`{Question}\`" "\`{Option 1}\`" "\`{Option 2}\`":** Sends out poll with reactions. Maximum of 10 options.`)
     .setThumbnail("https://github.com/jakesig/CivE-Bot/blob/master/share/bot%20icon.png?raw=true")
     .setTimestamp();
+    
   const embed = new Discord.MessageEmbed()
     .setColor('#c28080')
-    .setTitle('CivE Bot List of Commands')
+    .setTitle('CivE Bot - List of Commands')
     .setDescription(`**!help:** Opens this menu.
     **!git:** Returns git repository information.
     **!ping:** Pings the bot.
